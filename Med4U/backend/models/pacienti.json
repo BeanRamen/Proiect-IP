@@ -1,0 +1,35 @@
+[
+  {
+    "nume": "Ion Popescu",
+    "cnp": "1234567890123",
+    "varsta": 45,
+    "numar_telefon": "0712345678",
+    "email": "ion.popescu@example.com",
+    "adresa": "Strada Principala, Nr. 1, Bucuresti",
+    "loc_munca": "Spitalul Municipal",
+    "specificatii": "Diabetic",
+    "password": "$2a$12$X.5wUVKfyV1h5P.QdzYLPu7R1S3uUVVY9YBhBjhY8wAqPxdZxqvZ6"
+  },
+  {
+    "nume": "Maria Ionescu",
+    "cnp": "1234567890124",
+    "varsta": 34,
+    "numar_telefon": "0723456789",
+    "email": "maria.ionescu@example.com",
+    "adresa": "Bulevardul Republicii, Nr. 10, Cluj-Napoca",
+    "loc_munca": "Clinica Privata",
+    "specificatii": "Alergii multiple",
+    "password": "$2a$12$X.5wUVKfyV1h5P.QdzYLPu7R1S3uUVVY9YBhBjhY8wAqPxdZxqvZ6"
+  },
+  {
+    "nume": "Vasile Georgescu",
+    "cnp": "1234567890125",
+    "varsta": 50,
+    "numar_telefon": "0734567890",
+    "email": "vasile.georgescu@example.com",
+    "adresa": "Strada Libertatii, Nr. 15, Timisoara",
+    "loc_munca": "Policlinica Centrala",
+    "specificatii": "Hipertensiune",
+    "password": "$2a$12$X.5wUVKfyV1h5P.QdzYLPu7R1S3uUVVY9YBhBjhY8wAqPxdZxqvZ6"
+  }
+]

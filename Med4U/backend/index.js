@@ -1,36 +1,53 @@
 const express = require("express");
-const { MongoClient } = require("mongodb");
+const mongoose = require("mongoose");
 const cors = require("cors");
-const multer = require("multer");
+// const createError = require("http-errors");
 
-let app = express();
+const app = express();
+
+const DB_URL =
+  "mongodb+srv://med4uip:Qwerty123@med4u.6oxncqx.mongodb.net/authentication?retryWrites=true&w=majority";
+
+const connectionParams = {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+};
+
+// Middleware
 app.use(cors());
+app.use(express.json());
 
-const CONNECTION_STRING =
-  "mongodb+srv://med4uip:Qwerty123@med4u.6oxncqx.mongodb.net/?retryWrites=true&w=majority&appName=Med4U";
-const DATABASE_NAME = "Med4U";
+// Middleware pentru OPTIONS
+app.options("*", (req, res) => {
+  res.set("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.send();
+});
 
-let database;
+// Route setup
+const authRoute = require("./routes/authRoute");
+app.use("/api/auth", authRoute);
 
-app.listen(3000, () => {
-  MongoClient.connect(CONNECTION_STRING, (error, client) => {
-    if (error) {
-      console.error("Error connecting to MongoDB:", error);
-      return;
-    }
-    console.log("MongoDB connected successfully");
-    database = client.db(DATABASE_NAME);
+// MongoDB connection
+mongoose
+  .connect(DB_URL, connectionParams)
+  .then(() => console.info("Connected to MongoDB"))
+  .catch((error) => console.error("Failed to connect to MongoDB", error));
+
+// Global error handler
+app.use((err, req, res, next) => {
+  err.statusCode = err.statusCode || 500;
+  err.status = err.status || "error";
+
+  res.status(err.statusCode).json({
+    status: err.status,
+    message: err.message,
   });
 });
 
-app.get("/backend/test/GetNotes", (request, response) => {
-  console.log("Ruta /backend/test/GetNotes a fost apelată."); // Mesaj de consolă
-  database
-    .collection("Med4U_collection")
-    .find({})
-    .toArray((error, result) => {
-      console.log(result);
-      console.log(database);
-      response.send(result); // Trimite datele către client sub formă de JSON
-    });
+// Server setup
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`App running on ${PORT}`);
 });
