@@ -81,18 +81,21 @@ exports.login = async (req, res, next) => {
   try {
     const { cnp, password } = req.body;
 
+    // Find patient by CNP
     const pacient = await Pacient.findOne({ cnp });
 
-    if (!pacient)
+    if (!pacient) {
       return next(new createError("Pacientul nu a fost găsit!", 404));
+    }
 
+    // Check if password is valid
     const isPasswordValid = await bcrypt.compare(password, pacient.password);
 
     if (!isPasswordValid) {
-      console.log(createError);
       return next(new createError("Parola incorectă", 401));
     }
 
+    // Generate JWT token
     const token = jwt.sign({ _id: pacient._id }, "secretkey123", {
       expiresIn: "90d",
     });
@@ -108,6 +111,7 @@ exports.login = async (req, res, next) => {
       },
     });
   } catch (error) {
+    console.error("Login error:", error); // Log error details
     next(error);
   }
 };

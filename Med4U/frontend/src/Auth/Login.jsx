@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import { Button, Form, Input } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
+import useLogin from "../hooks/useLogin";
 
 const Login = () => {
+  const { error, loading, loginUser } = useLogin();
+
   const onFinish = (values) => {
     console.log("Received values of form: ", values);
-    // Call your login function here
+    loginUser(values);
   };
 
   const [placeholderText, setPlaceholderText] = useState("Introduceti CNP-ul");
@@ -63,7 +66,7 @@ const Login = () => {
           </div>
 
           <Form.Item
-            name="username"
+            name="cnp"
             rules={[
               {
                 required: true,

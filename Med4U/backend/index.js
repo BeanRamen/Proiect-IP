@@ -37,6 +37,7 @@ mongoose
 
 // Global error handler
 app.use((err, req, res, next) => {
+  console.error("Global error handler:", err); // Log error details
   err.statusCode = err.statusCode || 500;
   err.status = err.status || "error";
 
