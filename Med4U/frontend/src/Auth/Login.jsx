@@ -9,16 +9,26 @@ const Login = () => {
 
   const onFinish = (values) => {
     console.log("Received values of form: ", values);
-    loginUser(values);
+    loginUser({ ...values, userType });
   };
 
+  const [userType, setUserType] = useState("pacient");
   const [placeholderText, setPlaceholderText] = useState("Introduceti CNP-ul");
+  const [inputName, setInputName] = useState("cnp");
 
   const handleUserTypeChange = (e) => {
-    if (e.target.value === "pacient") {
+    const value = e.target.value;
+    setUserType(value);
+
+    if (value === "pacient") {
       setPlaceholderText("Introduceti CNP-ul");
-    } else if (e.target.value === "medic") {
+      setInputName("cnp");
+    } else if (value === "medic") {
       setPlaceholderText("Introduceti codul de parafa");
+      setInputName("codParafa");
+    } else if (value === "admin") {
+      setPlaceholderText("Introduceti email-ul");
+      setInputName("email");
     }
   };
 
@@ -62,11 +72,12 @@ const Login = () => {
             >
               <option value="pacient">Pacient</option>
               <option value="medic">Medic</option>
+              <option value="admin">Admin</option>
             </select>
           </div>
 
           <Form.Item
-            name="cnp"
+            name={inputName}
             rules={[
               {
                 required: true,
@@ -112,7 +123,7 @@ const Login = () => {
           </Form.Item>
         </Form>
 
-        <Link to="/register">
+        {/* <Link to="/register">
           <Button
             type="primary"
             htmlType="submit"
@@ -120,7 +131,7 @@ const Login = () => {
           >
             Cont nou
           </Button>
-        </Link>
+        </Link> */}
       </div>
     </div>
   );

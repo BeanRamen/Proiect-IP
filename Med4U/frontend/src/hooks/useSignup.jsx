@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext.jsx";
 import { message } from "antd";
+import { backendURL } from "../constants/backendURL";
 
 const useSignup = () => {
   const { login } = useAuth();
@@ -15,7 +16,7 @@ const useSignup = () => {
     try {
       setError(null);
       setLoading(true);
-      const res = await fetch("http://localhost:3000/api/auth/signup", {
+      const res = await fetch(`http://${backendURL}:3000/api/auth/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

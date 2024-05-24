@@ -16,18 +16,18 @@ export const HomePage = () => {
           oferit și rămâneți sănătoși!
         </span>
         <button
-          className="px-4 py-2 bg-[#147B72] text-white  rounded-full shadow-md hover:bg-white hover:text-[#147B72] mb-3 w-64"
+          className="px-4 py-2 bg-[#147B72] text-white  rounded-full shadow-md hover:bg-white hover:text-[#147B72] mb-0  w-52"
           onClick={() => navigate("/login")}
         >
           Autentificare
         </button>
 
-        <button
+        {/* <button
           className="px-4 py-2 bg-transparent text-[#147B72] rounded-full shadow-md hover:bg-[#147B72] hover:text-white w-64"
           onClick={() => navigate("/register")}
         >
           Cont nou
-        </button>
+        </button> */}
 
         <svg
           version="1.1"
@@ -37,7 +37,7 @@ export const HomePage = () => {
           x="0px"
           y="0px"
           viewBox="0 0 500 200"
-          className="absolute bottom-6 left-1/2 transform -translate-x-1/2 w-full max-w-[500px] transition-all duration-500 ease-in-out"
+          className="absolute  bottom-24 left-1/2 transform -translate-x-1/2 w-full max-w-[500px] transition-all duration-500 ease-in-out"
           xmlSpace="preserve"
         >
           <g>

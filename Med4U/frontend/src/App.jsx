@@ -20,13 +20,13 @@ const App = () => {
     <Router>
       <div className="App">
         <Routes>
-          <Route path="/" element={<HomePage />} />
           <Route
-            path="/register"
+            path="/"
             element={
-              !isAuthenticated ? <Register /> : <Navigate to="/pacient" />
+              !isAuthenticated ? <HomePage /> : <Navigate to="/pacient" />
             }
           />
+          <Route path="/register" element={<Register />} />
           <Route
             path="/login"
             element={!isAuthenticated ? <Login /> : <Navigate to="/pacient" />}

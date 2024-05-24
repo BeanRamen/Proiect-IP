@@ -1,4 +1,6 @@
 const Pacient = require("../models/PacientSchema");
+const Medic = require("../models/MedicSchema");
+const Admin = require("../models/AdminSchema");
 const createError = require("../utilis/appError.js");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -79,24 +81,27 @@ exports.signup = async (req, res, next) => {
 // Login
 exports.login = async (req, res, next) => {
   try {
-    const { cnp, password } = req.body;
+    const { userType, identifier, password } = req.body;
 
-    // Find patient by CNP
-    const pacient = await Pacient.findOne({ cnp });
-
-    if (!pacient) {
-      return next(new createError("Pacientul nu a fost găsit!", 404));
+    let user;
+    if (userType === "pacient") {
+      user = await Pacient.findOne({ cnp: identifier });
+    } else if (userType === "medic") {
+      user = await Medic.findOne({ codParafa: identifier });
+    } else if (userType === "admin") {
+      user = await Admin.findOne({ email: identifier });
     }
 
-    // Check if password is valid
-    const isPasswordValid = await bcrypt.compare(password, pacient.password);
+    if (!user) {
+      return next(new createError("Utilizatorul nu a fost găsit!", 404));
+    }
 
+    const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return next(new createError("Parola incorectă", 401));
     }
 
-    // Generate JWT token
-    const token = jwt.sign({ _id: pacient._id }, "secretkey123", {
+    const token = jwt.sign({ _id: user._id, role: user.role }, "secretkey123", {
       expiresIn: "90d",
     });
 
@@ -105,13 +110,18 @@ exports.login = async (req, res, next) => {
       token,
       message: "V-ați autentificat cu succes",
       user: {
-        _id: pacient._id,
-        cnp: pacient.cnp,
-        role: pacient.role,
+        _id: user._id,
+        identifier:
+          userType === "pacient"
+            ? user.cnp
+            : userType === "medic"
+            ? user.codParafa
+            : user.email,
+        role: user.role,
       },
     });
   } catch (error) {
-    console.error("Login error:", error); // Log error details
+    console.error("Login error:", error);
     next(error);
   }
 };

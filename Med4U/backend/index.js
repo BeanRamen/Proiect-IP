@@ -19,9 +19,9 @@ app.use(express.json());
 
 // Middleware pentru OPTIONS
 app.options("*", (req, res) => {
-  res.set("Access-Control-Allow-Origin", "http://localhost:3000");
-  res.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-  res.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.set("Access-Control-Allow-Origin", "*");
+  res.set("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS");
+  res.set("Access-Control-Allow-Headers", "*");
   res.send();
 });
 

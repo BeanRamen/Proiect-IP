@@ -45,7 +45,7 @@ const pacientSchema = new mongoose.Schema(
       default: "pacient",
     },
   },
-  { collection: "pacienti" }
+  { collection: "user" }
 );
 
 const Pacient = mongoose.model("Pacient", pacientSchema);
