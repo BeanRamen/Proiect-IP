@@ -117,21 +117,13 @@ const Login = () => {
               type="primary"
               htmlType="submit"
               className="px-4 py-2 h-10 bg-[#147B72] text-white rounded-full shadow-md hover:bg-white hover:text-[#147B72] mb-0 w-full"
+              loading={loading}
             >
               Autentificare
             </Button>
           </Form.Item>
+          {error && <p className="text-red-600">{error}</p>}
         </Form>
-
-        {/* <Link to="/register">
-          <Button
-            type="primary"
-            htmlType="submit"
-            className="px-4 py-2 h-10 bg-[#147B72] text-white rounded-full shadow-md hover:bg-white hover:text-[#147B72] mb-3 w-full"
-          >
-            Cont nou
-          </Button>
-        </Link> */}
       </div>
     </div>
   );

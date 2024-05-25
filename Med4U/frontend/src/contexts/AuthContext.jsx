@@ -1,46 +1,53 @@
-import React, { createContext, useEffect, useState, useContext } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
+export const useAuth = () => useContext(AuthContext);
+
 export const AuthProvider = ({ children }) => {
-  const [token, setToken] = useState(null);
-  const [userData, setUserData] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const storedData = JSON.parse(localStorage.getItem("user_data"));
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    if (storedData) {
-      const { userToken, user } = storedData;
-      setToken(userToken);
-      setUserData(user);
-      setIsAuthenticated(true);
-    }
-  }, []);
-
-  const login = (newToken, newData) => {
-    localStorage.setItem(
-      "user_data",
-      JSON.stringify({ userToken: newToken, user: newData })
-    );
-    setToken(newToken);
-    setUserData(newData);
-    setIsAuthenticated(true);
+  const login = (user) => {
+    localStorage.setItem("user", JSON.stringify(user));
+    setUser(user);
+    redirectUser(user.role);
   };
 
   const logout = () => {
-    localStorage.removeItem("user_data");
-    setToken(null);
-    setUserData(null);
-    setIsAuthenticated(false);
+    localStorage.removeItem("user");
+    setUser(null);
+    navigate("/login");
   };
 
+  const redirectUser = (role) => {
+    if (role === "admin") {
+      navigate("/admin");
+    } else if (role === "medic") {
+      navigate("/medic");
+    } else if (role === "pacient") {
+      navigate("/pacient");
+    }
+  };
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      try {
+        const user = JSON.parse(storedUser);
+        setUser(user);
+        redirectUser(user.role);
+      } catch (error) {
+        console.error("Failed to parse user from localStorage", error);
+        logout();
+      }
+    }
+  }, []);
+
   return (
-    <AuthContext.Provider
-      value={{ token, isAuthenticated, login, logout, userData }}
-    >
+    <AuthContext.Provider value={{ user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
 };
-
-export const useAuth = () => useContext(AuthContext);

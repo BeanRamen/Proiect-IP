@@ -1,26 +1,7 @@
 const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
 
-const MedicSchema = new Schema({
+const medicSchema = new mongoose.Schema({
   nume: {
-    type: String,
-    required: true,
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  id: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  specializare: {
-    type: String,
-    required: true,
-  },
-  telefon: {
     type: String,
     required: true,
   },
@@ -29,12 +10,23 @@ const MedicSchema = new Schema({
     required: true,
     unique: true,
   },
-  parola: {
+  specializare: String,
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  numar_telefon: String,
+  password: {
     type: String,
     required: true,
   },
+  role: {
+    type: String,
+    default: "medic",
+  },
 });
 
-const Medic = mongoose.model("Medic", MedicSchema);
+const Medic = mongoose.model("Medic", medicSchema);
 
-module.exports = { Medic };
+module.exports = Medic;

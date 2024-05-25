@@ -16,25 +16,18 @@ const useSignup = () => {
     try {
       setError(null);
       setLoading(true);
-      const res = await fetch(`http://${backendURL}:3000/api/auth/signup`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          user: {
-            nume: values.user.nume,
-            cnp: values.user.cnp,
-            varsta: values.user.varsta,
-            numar_telefon: values.user.numar_telefon,
-            email: values.user.email,
-            adresa: values.user.adresa,
-            loc_munca: values.user.loc_munca,
-            specificatii: values.user.descriere,
-            password: values.user.password,
+      const res = await fetch(
+        `http://${backendURL}:3000/api/auth/signup/pacient`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
           },
-        }),
-      });
+          body: JSON.stringify({
+            ...values.user,
+          }),
+        }
+      );
 
       const data = await res.json();
       if (res.status === 201) {

@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { useAuth } from "../contexts/AuthContext.jsx";
+import { useNavigate } from "react-router-dom";
 import { message } from "antd";
-import { backendURL } from "../constants/backendURL.js";
+import { backendURL } from "../constants/backendURL";
+import { useAuth } from "../contexts/AuthContext";
 
 const useLogin = () => {
+  const navigate = useNavigate();
   const { login } = useAuth();
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -12,28 +14,22 @@ const useLogin = () => {
     try {
       setError(null);
       setLoading(true);
-      const res = await fetch(`http://${backendURL}:3000/api/auth/login`, {
+
+      const response = await fetch(`http://${backendURL}:3000/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          cnp: values.cnp,
-          password: values.password,
-        }),
+        body: JSON.stringify(values),
       });
 
-      const data = await res.json();
-      console.log("Response data:", data);
-      if (res.status === 200) {
-        message.success(data.message);
-        login(data.token, data.user);
-      } else if (res.status === 404) {
-        setError(data.message);
-      } else {
-        setError(data.message || "Registration failed");
-        message.error(data.message || "Registration failed");
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Authentication failed!");
       }
+
+      login(data.user); // Utilizează funcția de login din AuthContext
     } catch (error) {
       setError(error.message);
       message.error(error.message);

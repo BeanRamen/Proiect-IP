@@ -1,49 +1,44 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate,
-} from "react-router-dom";
-
-import { HomePage } from "./Layout/HomePage";
-import ForgotPassword from "./Layout/ForgotPassword";
-import Register from "./Auth/Register";
-import Login from "./Auth/Login";
-import { useAuth } from "./contexts/AuthContext";
-import Pacient from "./Layout/Pacient";
+import { Routes, Route } from "react-router-dom";
+import HomePage from "./pages/HomePage";
+import Login from "./components/Login";
+import Register from "./components/Register";
+import AdminPage from "./pages/AdminPage";
+import MedicPage from "./pages/MedicPage";
+import PacientPage from "./pages/PacientPage";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const App = () => {
-  const { isAuthenticated } = useAuth();
-
   return (
-    <Router>
-      <div className="App">
-        <Routes>
-          <Route
-            path="/"
-            element={
-              !isAuthenticated ? <HomePage /> : <Navigate to="/pacient" />
-            }
-          />
-          <Route path="/register" element={<Register />} />
-          <Route
-            path="/login"
-            element={!isAuthenticated ? <Login /> : <Navigate to="/pacient" />}
-          />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route
-            path="/pacient"
-            element={isAuthenticated ? <Pacient /> : <Login />}
-          />
-
-          {/* <Route path="/pacient" element={<Pacient />} />
-            <Route path="/medic" element={<Medic />} /> */}
-
-          {/* Adaugă alte rute aici, dacă este necesar */}
-        </Routes>
-      </div>
-    </Router>
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute requiredRole="admin">
+            <AdminPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/medic"
+        element={
+          <ProtectedRoute requiredRole="medic">
+            <MedicPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/pacient"
+        element={
+          <ProtectedRoute requiredRole="pacient">
+            <PacientPage />
+          </ProtectedRoute>
+        }
+      />
+    </Routes>
   );
 };
 

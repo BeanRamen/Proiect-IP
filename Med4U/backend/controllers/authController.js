@@ -3,11 +3,51 @@ const Medic = require("../models/MedicSchema");
 const Admin = require("../models/AdminSchema");
 const createError = require("../utilis/appError.js");
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 
-// Register
-exports.signup = async (req, res, next) => {
-  console.log("Received data:", req.body);
+const loginUser = async (user, password, role, res, next) => {
+  if (!user) {
+    return next(new createError(`${role} nu a fost găsit!`, 404));
+  }
+
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+
+  if (!isPasswordValid) {
+    return next(new createError("Parola incorectă", 401));
+  }
+
+  res.status(200).json({
+    status: "success",
+    message: `V-ați autentificat cu succes ca ${role}`,
+    user: {
+      _id: user._id,
+      role: role,
+    },
+  });
+};
+
+const login = async (req, res, next) => {
+  try {
+    const { email, cnp, codParafa, password, userType } = req.body;
+
+    if (userType === "pacient") {
+      const pacient = await Pacient.findOne({ cnp });
+      await loginUser(pacient, password, "pacient", res, next);
+    } else if (userType === "medic") {
+      const medic = await Medic.findOne({ codParafa });
+      await loginUser(medic, password, "medic", res, next);
+    } else if (userType === "admin") {
+      const admin = await Admin.findOne({ email });
+      await loginUser(admin, password, "admin", res, next);
+    } else {
+      return next(new createError("Tip utilizator invalid", 400));
+    }
+  } catch (error) {
+    console.error("Login error:", error);
+    next(error);
+  }
+};
+
+const signupPacient = async (req, res, next) => {
   try {
     const {
       nume,
@@ -19,26 +59,15 @@ exports.signup = async (req, res, next) => {
       loc_munca,
       specificatii,
       password,
-    } = req.body.user;
+    } = req.body;
 
     const pacientByCNP = await Pacient.findOne({ cnp });
     const pacientByEmail = await Pacient.findOne({ email });
 
-    if (pacientByCNP) {
-      console.log(createError);
+    if (pacientByCNP || pacientByEmail) {
       return next(
         new createError(
-          "Un cont cu acest CNP există deja. Vă rugăm să vă logați pentru a continua.",
-          400
-        )
-      );
-    }
-
-    if (pacientByEmail) {
-      console.log(createError);
-      return next(
-        new createError(
-          "Un cont cu această adresă de email există deja. Vă rugăm să vă logați pentru a continua.",
+          "Un cont cu acest CNP sau adresă de email există deja. Vă rugăm să vă logați pentru a continua.",
           400
         )
       );
@@ -56,21 +85,16 @@ exports.signup = async (req, res, next) => {
       loc_munca,
       specificatii,
       password: hashedPassword,
-      role: req.body.user.role || "pacient",
-    });
-
-    const token = jwt.sign({ _id: newPacient._id }, "secretkey123", {
-      expiresIn: "90d",
+      role: "pacient",
     });
 
     res.status(201).json({
       status: "success",
       message: "Utilizatorul s-a înregistrat cu succes!",
-      token,
       user: {
         _id: newPacient._id,
         cnp: newPacient.cnp,
-        role: newPacient.role,
+        role: "pacient",
       },
     });
   } catch (error) {
@@ -78,50 +102,117 @@ exports.signup = async (req, res, next) => {
   }
 };
 
-// Login
-exports.login = async (req, res, next) => {
+const signupMedic = async (req, res, next) => {
   try {
-    const { userType, identifier, password } = req.body;
+    const { nume, codParafa, specializare, email, numar_telefon, password } =
+      req.body;
 
-    let user;
-    if (userType === "pacient") {
-      user = await Pacient.findOne({ cnp: identifier });
-    } else if (userType === "medic") {
-      user = await Medic.findOne({ codParafa: identifier });
-    } else if (userType === "admin") {
-      user = await Admin.findOne({ email: identifier });
+    const medicByCodParafa = await Medic.findOne({ codParafa });
+    const medicByEmail = await Medic.findOne({ email });
+
+    if (medicByCodParafa || medicByEmail) {
+      return next(
+        new createError(
+          "Un cont cu acest cod de parafa sau adresă de email există deja. Vă rugăm să vă logați pentru a continua.",
+          400
+        )
+      );
     }
 
-    if (!user) {
-      return next(new createError("Utilizatorul nu a fost găsit!", 404));
-    }
+    const hashedPassword = await bcrypt.hash(password, 12);
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
-      return next(new createError("Parola incorectă", 401));
-    }
-
-    const token = jwt.sign({ _id: user._id, role: user.role }, "secretkey123", {
-      expiresIn: "90d",
+    const newMedic = await Medic.create({
+      nume,
+      codParafa,
+      specializare,
+      email,
+      numar_telefon,
+      password: hashedPassword,
+      role: "medic",
     });
 
-    res.status(200).json({
+    res.status(201).json({
       status: "success",
-      token,
-      message: "V-ați autentificat cu succes",
+      message: "Utilizatorul s-a înregistrat cu succes!",
       user: {
-        _id: user._id,
-        identifier:
-          userType === "pacient"
-            ? user.cnp
-            : userType === "medic"
-            ? user.codParafa
-            : user.email,
-        role: user.role,
+        _id: newMedic._id,
+        codParafa: newMedic.codParafa,
+        role: "medic",
       },
     });
   } catch (error) {
-    console.error("Login error:", error);
     next(error);
   }
+};
+
+const signupAdmin = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+
+    const adminByEmail = await Admin.findOne({ email });
+
+    if (adminByEmail) {
+      return next(
+        new createError(
+          "Un cont cu această adresă de email există deja. Vă rugăm să vă logați pentru a continua.",
+          400
+        )
+      );
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    const newAdmin = await Admin.create({
+      email,
+      password: hashedPassword,
+      role: "admin",
+    });
+
+    res.status(201).json({
+      status: "success",
+      message: "Adminul s-a înregistrat cu succes!",
+      user: {
+        _id: newAdmin._id,
+        email: newAdmin.email,
+        role: "admin",
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const deleteMedic = async (req, res, next) => {
+  try {
+    const medicId = req.params.id;
+    const deletedMedic = await Medic.findByIdAndDelete(medicId);
+    if (!deletedMedic) {
+      return next(new createError("Medicul nu a fost găsit.", 404));
+    }
+    res.status(200).json({
+      status: "success",
+      message: "Medicul a fost șters cu succes.",
+      deletedMedic,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getMedici = async (req, res, next) => {
+  try {
+    const medici = await Medic.find();
+    res.status(200).json(medici);
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = {
+  login,
+  signupPacient,
+  signupMedic,
+  signupAdmin,
+  deleteMedic,
+  getMedici,
 };

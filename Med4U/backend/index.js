@@ -1,7 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-// const createError = require("http-errors");
 
 const app = express();
 
@@ -13,11 +12,9 @@ const connectionParams = {
   useUnifiedTopology: true,
 };
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Middleware pentru OPTIONS
 app.options("*", (req, res) => {
   res.set("Access-Control-Allow-Origin", "*");
   res.set("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS");
@@ -25,19 +22,16 @@ app.options("*", (req, res) => {
   res.send();
 });
 
-// Route setup
 const authRoute = require("./routes/authRoute");
 app.use("/api/auth", authRoute);
 
-// MongoDB connection
 mongoose
   .connect(DB_URL, connectionParams)
   .then(() => console.info("Connected to MongoDB"))
   .catch((error) => console.error("Failed to connect to MongoDB", error));
 
-// Global error handler
 app.use((err, req, res, next) => {
-  console.error("Global error handler:", err); // Log error details
+  console.error("Global error handler:", err);
   err.statusCode = err.statusCode || 500;
   err.status = err.status || "error";
 
@@ -47,7 +41,6 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Server setup
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`App running on ${PORT}`);
