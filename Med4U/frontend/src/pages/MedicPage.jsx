@@ -3,8 +3,7 @@ import AddPacientForm from "../components/AddPacientForm";
 import { useAuth } from "../contexts/AuthContext";
 import useMedic from "../hooks/useMedic";
 import PacientCard from "../components/PacientCard";
-import { Dropdown, Menu } from "antd";
-import { UserOutlined } from "@ant-design/icons";
+import { UserOutlined, LogoutOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 
 const MedicPage = () => {
@@ -22,33 +21,26 @@ const MedicPage = () => {
     navigate(`/medic/pacient/${pacientId}`);
   };
 
-  const menu = (
-    <Menu>
-      <Menu.Item key="1" onClick={logout}>
-        Logout
-      </Menu.Item>
-    </Menu>
-  );
-
-  console.log("Pacienti:", pacienti); // Adăugăm log pentru debug
-
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="bg-[#147B72] p-4 flex justify-between items-center">
         <h1 className="text-white text-2xl">Bine ai revenit!</h1>
-        <Dropdown menu={menu} trigger={["click"]}>
-          <UserOutlined className="text-white text-2xl cursor-pointer" />
-        </Dropdown>
+        <button
+          onClick={logout}
+          className="flex items-center bg-white text-[#147B72] px-4 py-2 rounded-full shadow-md hover:bg-gray-200"
+        >
+          <LogoutOutlined className="mr-2" /> Logout
+        </button>
       </div>
       <div className="p-4">
         {showAddForm ? (
           <AddPacientForm onSubmit={handleAddPacient} loading={loading} />
         ) : (
-          <div
-            className="flex flex-col items-center justify-center cursor-pointer"
-            onClick={() => setShowAddForm(true)}
-          >
-            <div className="w-24 h-24 flex items-center justify-center bg-[#147B72] text-white rounded-full mb-2">
+          <div className="flex flex-col items-center justify-center cursor-pointer">
+            <div
+              className="w-24 h-24 flex items-center justify-center bg-white text-[#147B72] rounded-full mb-2"
+              onClick={() => setShowAddForm(true)}
+            >
               <UserOutlined className="text-4xl" />
             </div>
             <span className="text-[#147B72] font-bold">Adaugă pacient</span>
