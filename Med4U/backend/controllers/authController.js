@@ -1,6 +1,7 @@
 const Pacient = require("../models/PacientSchema");
 const Medic = require("../models/MedicSchema");
 const Admin = require("../models/AdminSchema");
+const Recomandare = require("../models/recomandareSchema");
 const createError = require("../utilis/appError.js");
 const bcrypt = require("bcryptjs");
 
@@ -235,6 +236,56 @@ const getPacient = async (req, res, next) => {
   }
 };
 
+const getRecomandari = async (req, res, next) => {
+  try {
+    console.log(
+      "Fetching recommendations for patient ID:",
+      req.params.pacientId
+    );
+    const recomandari = await Recomandare.find({
+      pacient: req.params.pacientId,
+    });
+    res.json(recomandari);
+  } catch (error) {
+    console.error("Error fetching recommendations:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+const addRecomandare = async (req, res, next) => {
+  try {
+    if (!req.body.text || !req.body.text.trim()) {
+      return res
+        .status(400)
+        .json({ error: "Textul recomandării nu poate fi gol" });
+    }
+
+    console.log("Adding recommendation for patient ID:", req.params.pacientId);
+    const newRecomandare = new Recomandare({
+      pacient: req.params.pacientId,
+      text: req.body.text,
+      createdAt: new Date(),
+    });
+
+    const savedRecomandare = await newRecomandare.save();
+    res.json(savedRecomandare);
+  } catch (error) {
+    console.error("Error adding recommendation:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+const deleteRecomandare = async (req, res, next) => {
+  try {
+    console.log("Deleting recommendation with ID:", req.params.id);
+    await Recomandare.findByIdAndDelete(req.params.id);
+    res.json({ message: "Recomandare deleted" });
+  } catch (error) {
+    console.error("Error deleting recommendation:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
 module.exports = {
   login,
   signupPacient,
@@ -244,4 +295,7 @@ module.exports = {
   getMedici,
   getPacienti,
   getPacient,
+  getRecomandari,
+  addRecomandare,
+  deleteRecomandare,
 };

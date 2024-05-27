@@ -24,10 +24,6 @@ const pacientSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  // role: {
-  //   type: String,
-  //   default: "pacient",
-  // },
 });
 
 const Pacient = mongoose.model("Pacient", pacientSchema);

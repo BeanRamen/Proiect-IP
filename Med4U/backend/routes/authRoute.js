@@ -1,5 +1,3 @@
-// backend/routes/authRoute.js
-
 const express = require("express");
 const authController = require("../controllers/authController");
 const router = express.Router();
@@ -11,7 +9,11 @@ router.post("/signup/admin", authController.signupAdmin);
 router.delete("/delete/medic/:id", authController.deleteMedic);
 router.get("/medici", authController.getMedici);
 
-router.get("/pacienti", authController.getPacienti); // Route to get all patients for a medic
-router.get("/pacienti/:id", authController.getPacient); // Route to get a single patient by ID
+router.get("/pacienti", authController.getPacienti);
+router.get("/pacienti/:id", authController.getPacient);
+
+router.get("/recomandari/:pacientId", authController.getRecomandari);
+router.post("/recomandari/:pacientId", authController.addRecomandare);
+router.delete("/recomandari/:pacientId/:id", authController.deleteRecomandare);
 
 module.exports = router;

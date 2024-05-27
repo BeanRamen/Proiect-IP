@@ -18,7 +18,8 @@ import {
   AccountCircle as UserOutlined,
   Logout as LogoutOutlined,
 } from "@mui/icons-material";
-import ECGChart from "../components/ECGChart";
+import RecomandariList from "../components/RecomandariList";
+import IstoricRecomandari from "../components/IstoricRecomandari";
 
 const PacientDetailsPage = () => {
   const { pacientId } = useParams();
@@ -45,6 +46,9 @@ const PacientDetailsPage = () => {
         const response = await fetch(
           `http://${backendURL}:3000/api/auth/pacienti/${pacientId}`
         );
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const data = await response.json();
         setPacient(data);
       } catch (error) {
@@ -177,9 +181,7 @@ const PacientDetailsPage = () => {
             </Card>
             <div className="col-span-2 relative">
               <div className="bg-white p-4 rounded shadow-lg">
-                <div className="h-64 bg-gray-200 flex justify-center items-center">
-                  {/* <ECGChart /> Add the ECGChart component here */}
-                </div>
+                <div className="h-64 bg-gray-200 flex justify-center items-center"></div>
               </div>
               <div className="absolute top-0 left-4 bg-red-600 text-white px-2 py-1 rounded-b-lg transform -translate-y-1/2">
                 Alertă ECG
@@ -188,46 +190,13 @@ const PacientDetailsPage = () => {
           </div>
         </div>
         <div className="mt-8">
-          <Typography
-            variant="h4"
-            className="text-center text-white bg-[#147B72]  min-h-4"
-          >
-            RECOMANDĂRI
-          </Typography>
-          <div className="mt-4">
-            <Card className="bg-white p-4  rounded-full shadow-lg mb-4">
-              <CardContent>
-                <Typography variant="h6" className="text-[#147B72]">
-                  Ultima recomandare
-                </Typography>
-                <Typography>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Consequat bibendum sit felis, sollicitudin et. Nulla aliquet
-                  integer hac ac morbi. Lorem ipsum dolor sit amet, consectetur
-                  adipiscing elit. Consequat bibendum sit felis, sollicitudin
-                  et. Nulla aliquet integer hac ac morbi. Lorem ipsum dolor sit
-                  amet, consectetur adipiscing elit. Consequat bibendum sit
-                  felis, sollicitudin et. Nulla aliquet integer hac ac morbi.
-                </Typography>
-              </CardContent>
-            </Card>
-            <Card className="bg-white p-4 rounded shadow-lg">
-              <CardContent>
-                <Typography variant="h6" className="text-[#147B72]">
-                  Penultima recomandare
-                </Typography>
-                <Typography>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Blandit viverra porta tortor, elementum ultrices. Blandit quam
-                  nec aliquam. Lorem ipsum dolor sit amet, consectetur
-                  adipiscing elit. Blandit viverra porta tortor, elementum
-                  ultrices. Blandit quam nec aliquam. Lorem ipsum dolor sit
-                  amet, consectetur adipiscing elit. Blandit viverra porta
-                  tortor, elementum ultrices. Blandit quam nec aliquam.
-                </Typography>
-              </CardContent>
-            </Card>
-          </div>
+          <RecomandariList
+            pacientId={pacientId}
+            isMedic={user.role === "medic"}
+          />
+        </div>
+        <div className="mt-8">
+          <IstoricRecomandari pacientId={pacientId} />
         </div>
       </div>
     </div>
