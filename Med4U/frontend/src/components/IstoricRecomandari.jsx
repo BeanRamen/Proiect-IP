@@ -6,13 +6,11 @@ import {
   ListItemText,
   Collapse,
   Typography,
-  Card,
-  CardContent,
 } from "@mui/material";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 
 const IstoricRecomandari = ({ pacientId }) => {
-  const [istoric, setIstoric] = useState({});
+  const [istoric, setIstoric] = useState([]);
   const [open, setOpen] = useState({});
 
   useEffect(() => {
@@ -47,35 +45,41 @@ const IstoricRecomandari = ({ pacientId }) => {
   };
 
   return (
-    <div className="p-4 bg-teal-50">
-      <Typography variant="h4" className="text-center text-[#147B72] mb-4">
+    <div className="bg-[#147B72] p-4 rounded-t-lg">
+      <Typography variant="h4" className="text-center text-white mb-4">
         ISTORIC
       </Typography>
-      <List>
-        {Object.keys(istoric).map((date) => (
-          <div key={date}>
-            <ListItem button onClick={() => handleClick(date)}>
-              <ListItemText primary={date} className="text-[#147B72]" />
-              {open[date] ? <ExpandLess /> : <ExpandMore />}
-            </ListItem>
-            <Collapse in={open[date]} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding>
-                {istoric[date].map((recomandare) => (
-                  <ListItem key={recomandare._id} className="pl-4">
-                    <Card className="w-full bg-white mb-2">
-                      <CardContent>
-                        <Typography variant="body2">
-                          {recomandare.text}
-                        </Typography>
-                      </CardContent>
-                    </Card>
-                  </ListItem>
-                ))}
-              </List>
-            </Collapse>
-          </div>
-        ))}
-      </List>
+      <div className="bg-gray-100 p-4 rounded-b-lg max-h-96 overflow-y-auto">
+        <List>
+          {Object.keys(istoric).map((date) => (
+            <div key={date} className="mb-4">
+              <ListItem
+                button
+                onClick={() => handleClick(date)}
+                className="bg-white rounded-lg shadow mb-2"
+              >
+                <ListItemText primary={date} className="text-[#147B72]" />
+                {open[date] ? <ExpandLess /> : <ExpandMore />}
+              </ListItem>
+              <Collapse in={open[date]} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                  {istoric[date].map((recomandare) => (
+                    <ListItem
+                      key={recomandare._id}
+                      className="bg-gray-100 rounded-lg shadow mb-2 pl-6"
+                    >
+                      <ListItemText
+                        primary={recomandare.text}
+                        className="text-gray-700"
+                      />
+                    </ListItem>
+                  ))}
+                </List>
+              </Collapse>
+            </div>
+          ))}
+        </List>
+      </div>
     </div>
   );
 };

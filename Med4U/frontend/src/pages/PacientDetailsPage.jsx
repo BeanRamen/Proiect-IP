@@ -46,7 +46,7 @@ const PacientDetailsPage = () => {
   return (
     <div className="min-h-screen bg-gray-100">
       <Navbar pacient={pacient} />
-      <div className="p-8">
+      <div className="p-8 w-4/5 mx-auto">
         <Typography variant="h4" className="text-center text-[#147B72] mb-8">
           Statusul măsurătorilor de astăzi
         </Typography>
@@ -73,13 +73,13 @@ const PacientDetailsPage = () => {
           </div>
         </div>
       </div>
-      <div id="recomandari" className="mt-8">
+      <div id="recomandari" className="mt-8 w-4/5 mx-auto">
         <RecomandariList
           pacientId={pacientId}
           isMedic={user.role === "medic"}
         />
       </div>
-      <div id="istoric" className="mt-8">
+      <div id="istoric" className="mt-8 w-4/5 mx-auto">
         <IstoricRecomandari pacientId={pacientId} />
       </div>
     </div>

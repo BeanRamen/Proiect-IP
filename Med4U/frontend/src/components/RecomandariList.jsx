@@ -1,14 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { backendURL } from "../constants/backendURL";
-import {
-  List,
-  ListItem,
-  ListItemText,
-  IconButton,
-  Button,
-  TextareaAutosize,
-  Typography,
-} from "@mui/material";
+import { Typography, IconButton } from "@mui/material";
 import { Delete as DeleteIcon } from "@mui/icons-material";
 
 const RecomandariList = ({ pacientId, isMedic }) => {
@@ -25,7 +17,7 @@ const RecomandariList = ({ pacientId, isMedic }) => {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        setRecomandari(data);
+        setRecomandari(data.reverse());
       } catch (error) {
         console.error("Error fetching recommendations:", error);
       }
@@ -35,8 +27,6 @@ const RecomandariList = ({ pacientId, isMedic }) => {
   }, [pacientId]);
 
   const handleAddRecomandare = async () => {
-    if (newRecomandare.trim() === "") return;
-
     try {
       const response = await fetch(
         `http://${backendURL}:3000/api/auth/recomandari/${pacientId}`,
@@ -50,7 +40,7 @@ const RecomandariList = ({ pacientId, isMedic }) => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      setRecomandari([...recomandari, data]);
+      setRecomandari([data, ...recomandari]);
       setNewRecomandare("");
     } catch (error) {
       console.error("Error adding recommendation:", error);
@@ -75,46 +65,62 @@ const RecomandariList = ({ pacientId, isMedic }) => {
   };
 
   return (
-    <div>
-      <Typography variant="h4" className="text-center text-[#147B72] mb-8">
+    <div className="bg-[#147B72] p-4 rounded-t-lg">
+      <Typography variant="h4" className="text-center text-white mb-4">
         RECOMANDĂRI
       </Typography>
-      {isMedic && (
-        <div className="my-4">
-          <TextareaAutosize
-            minRows={3}
-            placeholder="Adaugă recomandare"
-            value={newRecomandare}
-            onChange={(e) => setNewRecomandare(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-          <Button
-            onClick={handleAddRecomandare}
-            variant="contained"
-            color="primary"
-            className="mt-2"
-            disabled={!newRecomandare.trim()}
-          >
-            Adaugă
-          </Button>
+      <div className="bg-gray-100 p-4 rounded-b-lg">
+        {isMedic && (
+          <div className="mb-4">
+            <textarea
+              className="w-full p-2 border border-gray-300 rounded-lg"
+              rows="3"
+              placeholder="Adaugă recomandare"
+              value={newRecomandare}
+              onChange={(e) => setNewRecomandare(e.target.value)}
+            />
+            <button
+              onClick={handleAddRecomandare}
+              className="mt-2 px-4 py-2 bg-[#147B72] text-white rounded-lg shadow hover:bg-gray-200"
+              disabled={!newRecomandare.trim()}
+            >
+              Adaugă
+            </button>
+          </div>
+        )}
+        <div className="space-y-4">
+          {recomandari.map((recomandare, index) => (
+            <div
+              key={recomandare._id}
+              className="bg-white p-4 rounded-lg shadow flex justify-between items-center"
+            >
+              <div>
+                <Typography
+                  variant="subtitle1"
+                  className="text-[#147B72] font-bold"
+                >
+                  {index === 0
+                    ? "Ultima recomandare"
+                    : index === 1
+                    ? "Penultima recomandare"
+                    : `Recomandare ${index + 1}`}
+                </Typography>
+                <Typography variant="body1" className="text-gray-700">
+                  {recomandare.text}
+                </Typography>
+              </div>
+              {isMedic && (
+                <IconButton
+                  onClick={() => handleDeleteRecomandare(recomandare._id)}
+                  className="text-red-500"
+                >
+                  <DeleteIcon />
+                </IconButton>
+              )}
+            </div>
+          ))}
         </div>
-      )}
-      <List>
-        {recomandari.map((recomandare) => (
-          <ListItem key={recomandare._id}>
-            <ListItemText primary={recomandare.text} />
-            {isMedic && (
-              <IconButton
-                edge="end"
-                aria-label="delete"
-                onClick={() => handleDeleteRecomandare(recomandare._id)}
-              >
-                <DeleteIcon />
-              </IconButton>
-            )}
-          </ListItem>
-        ))}
-      </List>
+      </div>
     </div>
   );
 };
