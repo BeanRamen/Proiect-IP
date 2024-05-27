@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Navigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { backendURL } from "../constants/backendURL";
-import { Typography } from "@mui/material"; // Import correct
+import { Typography } from "@mui/material";
 import Navbar from "../components/Navbar";
 import StatusText from "../components/StatusText";
 import MeasurementCard from "../components/MeasurementCard";
@@ -38,6 +38,10 @@ const PacientDetailsPage = () => {
 
     fetchPacientDetails();
   }, [pacientId]);
+
+  if (!user) {
+    return <Navigate to="/login" />;
+  }
 
   return (
     <div className="min-h-screen bg-gray-100">

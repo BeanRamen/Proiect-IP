@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { backendURL } from "../constants/backendURL";
 import {
-  Button,
   List,
   ListItem,
   ListItemText,
   IconButton,
-  Typography,
-  Card,
-  CardContent,
+  Button,
   TextareaAutosize,
+  Typography,
 } from "@mui/material";
 import { Delete as DeleteIcon } from "@mui/icons-material";
 
@@ -37,10 +35,8 @@ const RecomandariList = ({ pacientId, isMedic }) => {
   }, [pacientId]);
 
   const handleAddRecomandare = async () => {
-    if (!newRecomandare.trim()) {
-      // Nu trimite request dacă input-ul este gol
-      return;
-    }
+    if (newRecomandare.trim() === "") return;
+
     try {
       const response = await fetch(
         `http://${backendURL}:3000/api/auth/recomandari/${pacientId}`,
@@ -79,8 +75,8 @@ const RecomandariList = ({ pacientId, isMedic }) => {
   };
 
   return (
-    <div className="p-4 bg-teal-50">
-      <Typography variant="h4" className="text-center text-[#147B72] mb-4">
+    <div>
+      <Typography variant="h4" className="text-center text-[#147B72] mb-8">
         RECOMANDĂRI
       </Typography>
       {isMedic && (
@@ -90,7 +86,7 @@ const RecomandariList = ({ pacientId, isMedic }) => {
             placeholder="Adaugă recomandare"
             value={newRecomandare}
             onChange={(e) => setNewRecomandare(e.target.value)}
-            className="w-full p-2 rounded border border-gray-300"
+            className="w-full p-2 border border-gray-300 rounded"
           />
           <Button
             onClick={handleAddRecomandare}
@@ -103,34 +99,6 @@ const RecomandariList = ({ pacientId, isMedic }) => {
           </Button>
         </div>
       )}
-      <div>
-        {recomandari.length > 0 && (
-          <>
-            <Card className="mb-4 bg-white">
-              <CardContent>
-                <Typography variant="h6" className="text-[#147B72]">
-                  Ultima recomandare
-                </Typography>
-                <Typography variant="body1" className="mt-2">
-                  {recomandari[recomandari.length - 1].text}
-                </Typography>
-              </CardContent>
-            </Card>
-            {recomandari.length > 1 && (
-              <Card className="mb-4 bg-white">
-                <CardContent>
-                  <Typography variant="h6" className="text-[#147B72]">
-                    Penultima recomandare
-                  </Typography>
-                  <Typography variant="body1" className="mt-2">
-                    {recomandari[recomandari.length - 2].text}
-                  </Typography>
-                </CardContent>
-              </Card>
-            )}
-          </>
-        )}
-      </div>
       <List>
         {recomandari.map((recomandare) => (
           <ListItem key={recomandare._id}>

@@ -12,7 +12,9 @@ export const AuthProvider = ({ children }) => {
   const login = (user) => {
     localStorage.setItem("user", JSON.stringify(user));
     setUser(user);
-    redirectUser(user.role);
+    if (user) {
+      redirectUser(user);
+    }
   };
 
   const logout = () => {
@@ -21,13 +23,13 @@ export const AuthProvider = ({ children }) => {
     navigate("/login");
   };
 
-  const redirectUser = (role) => {
-    if (role === "admin") {
+  const redirectUser = (user) => {
+    if (user.role === "admin") {
       navigate("/admin");
-    } else if (role === "medic") {
+    } else if (user.role === "medic") {
       navigate("/medic");
-    } else if (role === "pacient") {
-      navigate("/pacient");
+    } else if (user.role === "pacient") {
+      navigate(`/pacient/${user._id}`);
     }
   };
 
@@ -37,13 +39,18 @@ export const AuthProvider = ({ children }) => {
       try {
         const user = JSON.parse(storedUser);
         setUser(user);
-        redirectUser(user.role);
       } catch (error) {
         console.error("Failed to parse user from localStorage", error);
         logout();
       }
     }
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      redirectUser(user);
+    }
+  }, [user]);
 
   return (
     <AuthContext.Provider value={{ user, login, logout }}>
