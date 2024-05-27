@@ -1,0 +1,81 @@
+#include <ESP8266WiFi.h>
+#include <PubSubClient.h>
+
+// WiFi Configuration
+const char* ssid = "iPhone - Haideea";
+const char* password = "201008maarh";
+const char* mqtt_server = "test.mosquitto.org";
+
+// Global Objects
+WiFiClient espClient;
+PubSubClient client(espClient);
+
+void setup_wifi();
+void reconnect();
+
+void setup() {
+  Serial.begin(115200);
+  setup_wifi();
+  client.setServer(mqtt_server, 1883);
+
+  if (client.connected()) {
+    Serial.println("Connected to MQTT server.");
+  } else {
+    Serial.println("Failed to connect to MQTT server.");
+  }
+}
+
+void loop() {
+  // Placeholder for main loop logic
+}
+
+void setup_wifi() {
+  delay(10);
+  Serial.println();
+  Serial.print("Connecting to ");
+  Serial.println(ssid);
+
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(ssid, password);
+
+  int retry_count = 0;
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+    retry_count++;
+    if (retry_count >= 60) { // Încercăm pentru 30 secunde
+      Serial.println();
+      Serial.println("Failed to connect to WiFi");
+      return;
+    }
+  }
+
+  Serial.println();
+  Serial.println("WiFi connected");
+  Serial.print("IP address: ");
+  Serial.println(WiFi.localIP());
+}
+
+void reconnect() {
+  // Loop until we're reconnected
+  while (!client.connected()) {
+    Serial.print("Attempting MQTT connection...");
+    // Create a random client ID
+    String clientId = "ESP8266Client-";
+    clientId += String(random(0xffff), HEX);
+    // Attempt to connect
+    if (client.connect(clientId.c_str())) {
+      Serial.println("connected");
+      // Once connected, publish an announcement...
+      client.publish("test", "hey: 78");
+      // ... and resubscribe
+      client.subscribe("test");
+    } else {
+      Serial.print("failed, rc=");
+      Serial.print(client.state());
+      Serial.println(" try again in 5 seconds");
+      // Wait 5 seconds before retrying
+      delay(5000);
+    }
+  }
+}
