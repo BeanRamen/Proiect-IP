@@ -1,0 +1,3 @@
+Conexiunea la WiFi și MQTT.
+Conexiunea fizică a dispozitivelor.
+Funcționarea corectă a dispozitivelor.

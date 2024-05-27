@@ -1,0 +1,58 @@
+#include <DHT.h>
+
+// Pin Definitions
+#define dhtPin D4
+#define dhtType DHT11
+#define ecgPin A0
+
+// Global Objects
+DHT dht(dhtPin, dhtType);
+
+void setup() {
+  Serial.begin(115200);
+  dht.begin();
+  pinMode(ecgPin, INPUT);
+
+  Serial.println("Checking device functionality...");
+
+  // Test DHT sensor functionality
+  float temp = readTemperature();
+  float humidity = readHumidity();
+  if (!isnan(temp) && !isnan(humidity)) {
+    Serial.print("Temperature: ");
+    Serial.print(temp);
+    Serial.print(" °C, Humidity: ");
+    Serial.print(humidity);
+    Serial.println(" %");
+  } else {
+    Serial.println("DHT sensor functionality test failed.");
+  }
+
+  // Test ECG sensor functionality
+  int ecgValue = readECG();
+  if (ecgValue >= 0 && ecgValue <= 1024) {
+    Serial.print("ECG value: ");
+    Serial.println(ecgValue);
+  } else {
+    Serial.println("ECG sensor functionality test failed.");
+  }
+}
+
+void loop() {
+  // Placeholder for main loop logic
+}
+
+float readTemperature() {
+  float temperature = dht.readTemperature();
+  return temperature;
+}
+
+float readHumidity() {
+  float humidity = dht.readHumidity();
+  return humidity;
+}
+
+int readECG() {
+  int ecgValue = analogRead(ecgPin);
+  return ecgValue;
+}
