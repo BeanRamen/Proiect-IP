@@ -1,0 +1,38 @@
+#include <DHT.h>
+
+// Pin Definitions
+#define dhtPin D4
+#define dhtType DHT11
+#define ecgPin A0
+
+// Global Objects
+DHT dht(dhtPin, dhtType);
+
+void setup() {
+  Serial.begin(115200);
+  dht.begin();
+  pinMode(ecgPin, INPUT);
+
+  Serial.println("Checking device connections...");
+
+  // Check DHT sensor
+  float testTemp = dht.readTemperature();
+  float testHum = dht.readHumidity();
+  if (!isnan(testTemp) && !isnan(testHum)) {
+    Serial.println("DHT sensor connection test passed.");
+  } else {
+    Serial.println("DHT sensor connection test failed.");
+  }
+
+  // Check ECG sensor
+  int ecgValue = analogRead(ecgPin);
+  if (ecgValue >= 0 && ecgValue <= 1024) {
+    Serial.println("ECG sensor connection test passed.");
+  } else {
+    Serial.println("ECG sensor connection test failed.");
+  }
+}
+
+void loop() {
+  // Placeholder for main loop logic
+}
