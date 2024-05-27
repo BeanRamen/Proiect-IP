@@ -6,6 +6,8 @@ import {
   ListItemText,
   Collapse,
   Typography,
+  Card,
+  CardContent,
 } from "@mui/material";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 
@@ -45,22 +47,28 @@ const IstoricRecomandari = ({ pacientId }) => {
   };
 
   return (
-    <div>
-      <Typography variant="h4" className="text-center text-[#147B72]">
+    <div className="p-4 bg-teal-50">
+      <Typography variant="h4" className="text-center text-[#147B72] mb-4">
         ISTORIC
       </Typography>
       <List>
         {Object.keys(istoric).map((date) => (
           <div key={date}>
             <ListItem button onClick={() => handleClick(date)}>
-              <ListItemText primary={date} />
+              <ListItemText primary={date} className="text-[#147B72]" />
               {open[date] ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
             <Collapse in={open[date]} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
                 {istoric[date].map((recomandare) => (
-                  <ListItem key={recomandare._id}>
-                    <ListItemText primary={recomandare.text} />
+                  <ListItem key={recomandare._id} className="pl-4">
+                    <Card className="w-full bg-white mb-2">
+                      <CardContent>
+                        <Typography variant="body2">
+                          {recomandare.text}
+                        </Typography>
+                      </CardContent>
+                    </Card>
                   </ListItem>
                 ))}
               </List>
