@@ -6,6 +6,7 @@ import Register from "./components/Register";
 import AdminPage from "./pages/AdminPage";
 import MedicPage from "./pages/MedicPage";
 import PacientPage from "./pages/PacientPage";
+import PacientDetailsPage from "./pages/PacientDetailsPage"; // Importă componenta PacientDetailsPage
 import ProtectedRoute from "./components/ProtectedRoute";
 
 const App = () => {
@@ -35,6 +36,14 @@ const App = () => {
         element={
           <ProtectedRoute requiredRole="pacient">
             <PacientPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/medic/pacient/:pacientId"
+        element={
+          <ProtectedRoute requiredRole="medic">
+            <PacientDetailsPage />
           </ProtectedRoute>
         }
       />
