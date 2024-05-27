@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import { backendURL } from "../constants/backendURL";
 import {
   Button,
-  TextField,
   List,
   ListItem,
   ListItemText,
   IconButton,
   Typography,
+  Card,
+  CardContent,
+  TextareaAutosize,
 } from "@mui/material";
 import { Delete as DeleteIcon } from "@mui/icons-material";
 
@@ -77,17 +79,18 @@ const RecomandariList = ({ pacientId, isMedic }) => {
   };
 
   return (
-    <div>
-      <Typography variant="h4" className="text-center text-[#147B72]">
+    <div className="p-4 bg-teal-50">
+      <Typography variant="h4" className="text-center text-[#147B72] mb-4">
         RECOMANDĂRI
       </Typography>
       {isMedic && (
         <div className="my-4">
-          <TextField
-            label="Adaugă recomandare"
+          <TextareaAutosize
+            minRows={3}
+            placeholder="Adaugă recomandare"
             value={newRecomandare}
             onChange={(e) => setNewRecomandare(e.target.value)}
-            fullWidth
+            className="w-full p-2 rounded border border-gray-300"
           />
           <Button
             onClick={handleAddRecomandare}
@@ -100,6 +103,34 @@ const RecomandariList = ({ pacientId, isMedic }) => {
           </Button>
         </div>
       )}
+      <div>
+        {recomandari.length > 0 && (
+          <>
+            <Card className="mb-4 bg-white">
+              <CardContent>
+                <Typography variant="h6" className="text-[#147B72]">
+                  Ultima recomandare
+                </Typography>
+                <Typography variant="body1" className="mt-2">
+                  {recomandari[recomandari.length - 1].text}
+                </Typography>
+              </CardContent>
+            </Card>
+            {recomandari.length > 1 && (
+              <Card className="mb-4 bg-white">
+                <CardContent>
+                  <Typography variant="h6" className="text-[#147B72]">
+                    Penultima recomandare
+                  </Typography>
+                  <Typography variant="body1" className="mt-2">
+                    {recomandari[recomandari.length - 2].text}
+                  </Typography>
+                </CardContent>
+              </Card>
+            )}
+          </>
+        )}
+      </div>
       <List>
         {recomandari.map((recomandare) => (
           <ListItem key={recomandare._id}>
