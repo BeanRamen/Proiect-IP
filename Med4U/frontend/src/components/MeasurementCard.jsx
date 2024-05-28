@@ -1,7 +1,6 @@
 import React from "react";
 import { Card, CardContent, Typography } from "@mui/material";
-import tmpChrtIcon from "../assets/tmpChrt.svg"; // Make sure to import the correct path
-import humIcon from "../assets/hum.svg"; // Make sure to import the correct path
+import tmpChrt from "../assets/tmpChrt.svg";
 
 const MeasurementCard = ({
   imageSrc,
@@ -9,24 +8,21 @@ const MeasurementCard = ({
   value,
   unit,
   status,
-  extraValue,
+  showHumidityIcon,
 }) => {
   return (
     <Card
-      className="bg-white p-4  rounded-3xl shadow-lg"
+      className="bg-white p-4 rounded-xl shadow-lg text-center border border-gray-300"
       sx={{ borderRadius: "24px" }}
     >
-      <CardContent className="flex flex-col items-center">
-        <div className="flex items-center justify-start w-full mb-4">
-          <img src={imageSrc} alt={title} className="w-12 mr-2" />
-          <Typography
-            variant="h6"
-            className="text-black text-left leading-tight"
-          >
-            {title.split(" ").map((word, index) => (
-              <div key={index}>{word}</div>
-            ))}
-          </Typography>
+      <CardContent>
+        <div className="flex items-center justify-center mb-4">
+          <img src={imageSrc} alt={title} className="w-10 h-10 mr-2" />
+          <div className="text-left">
+            <Typography variant="h6" className="text-[#147B72] leading-tight">
+              {title.split(" ")[0]} <br /> {title.split(" ")[1]}
+            </Typography>
+          </div>
         </div>
         <Typography variant="h4" className="font-bold mb-2">
           {value} {unit}
@@ -34,15 +30,16 @@ const MeasurementCard = ({
         <Typography className={`text-${status.color}-600 mb-4`}>
           {status.text}
         </Typography>
-        {extraValue && (
-          <div className="flex items-center mb-2">
-            <img src={humIcon} alt="Humidity" className="w-6 mr-2" />
-            <Typography variant="h6" className="font-bold text-gray-700">
-              {extraValue.value} {extraValue.unit}
-            </Typography>
-          </div>
-        )}
-        <img src={tmpChrtIcon} alt="Chart" className="w-3/4 mt-4" />
+        <div className="flex justify-center items-center">
+          {showHumidityIcon && (
+            <img
+              src="/assets/hum.svg"
+              alt="Humidity"
+              className="w-6 h-6 mr-2"
+            />
+          )}
+          <img src={tmpChrt} alt="Graph" className="w-full h-24" />
+        </div>
       </CardContent>
     </Card>
   );

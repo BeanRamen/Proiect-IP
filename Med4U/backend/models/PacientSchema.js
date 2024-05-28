@@ -24,6 +24,11 @@ const pacientSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  parafa: String, // Asigură-te că ai acest câmp în schema ta
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 const Pacient = mongoose.model("Pacient", pacientSchema);

@@ -2,6 +2,7 @@ const Pacient = require("../models/PacientSchema");
 const Medic = require("../models/MedicSchema");
 const Admin = require("../models/AdminSchema");
 const Recomandare = require("../models/recomandareSchema");
+const EcgData = require("../models/ecgDataSchema");
 const createError = require("../utilis/appError.js");
 const bcrypt = require("bcryptjs");
 
@@ -212,7 +213,7 @@ const getMedici = async (req, res, next) => {
 const getPacienti = async (req, res, next) => {
   try {
     const { medicId } = req.query;
-    console.log("Fetching pacients for medic with ID:", medicId); // Adăugăm log pentru debug
+    console.log("Fetching pacients for medic with ID:", medicId);
     const pacients = await Pacient.find({ medic: medicId });
     res.status(200).json(pacients);
   } catch (error) {
@@ -224,7 +225,6 @@ const getPacienti = async (req, res, next) => {
 const getPacient = async (req, res, next) => {
   try {
     const { id } = req.params;
-    console.log("Fetching pacient with ID:", id); // Adăugăm log pentru debug
     const pacient = await Pacient.findById(id);
     if (!pacient) {
       return res.status(404).json({ message: "Pacient not found" });
@@ -286,6 +286,30 @@ const deleteRecomandare = async (req, res, next) => {
   }
 };
 
+const getPacientDetails = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const pacient = await Pacient.findById(id);
+
+    if (!pacient) {
+      return res.status(404).json({ message: "Pacient not found" });
+    }
+
+    const ecgData = await EcgData.findOne({ pacientId: id }).sort({
+      createdAt: -1,
+    });
+
+    if (!ecgData) {
+      return res.status(404).json({ message: "EcgData not found" });
+    }
+
+    res.status(200).json({ pacient, ecgData });
+  } catch (error) {
+    console.error("Error fetching pacient:", error);
+    next(error);
+  }
+};
+
 module.exports = {
   login,
   signupPacient,
@@ -298,4 +322,5 @@ module.exports = {
   getRecomandari,
   addRecomandare,
   deleteRecomandare,
+  getPacientDetails,
 };

@@ -9,17 +9,19 @@ import MeasurementCard from "../components/MeasurementCard";
 import ECGGraph from "../components/ECGGraph";
 import RecomandariList from "../components/RecomandariList";
 import IstoricRecomandari from "../components/IstoricRecomandari";
+
 import bpmIcon from "../assets/bpm.svg";
-import tempIcon from "../assets/tmp.svg";
+import tmpIcon from "../assets/tmp.svg";
+import humIcon from "../assets/hum.svg";
 
 const PacientDetailsPage = () => {
   const { pacientId } = useParams();
   const { user } = useAuth();
   const [pacient, setPacient] = useState(null);
   const [measurements, setMeasurements] = useState({
-    puls: 98,
-    temperatura: 38.3,
-    umiditate: 45,
+    puls: 0,
+    temperatura: 0,
+    umiditate: 0,
     ecg: [],
   });
 
@@ -33,7 +35,13 @@ const PacientDetailsPage = () => {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        setPacient(data);
+        setPacient(data.pacient);
+        setMeasurements({
+          puls: data.ecgData?.puls || 0,
+          temperatura: data.ecgData?.temperatura || 0,
+          umiditate: data.ecgData?.umiditate || 0,
+          ecg: data.ecgData?.ecg || [],
+        });
       } catch (error) {
         console.error("Error fetching pacient details:", error);
       }
@@ -52,21 +60,30 @@ const PacientDetailsPage = () => {
       <div className="p-8 w-4/5 mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <StatusText />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="flex flex-col md:grid md:grid-cols-2 gap-4">
             <MeasurementCard
               imageSrc={bpmIcon}
               title="Bătăile inimii"
               value={measurements.puls}
               unit="bpm"
               status={{ text: "Normal", color: "green" }}
+              showHumidityIcon={false}
             />
             <MeasurementCard
-              imageSrc={tempIcon}
+              imageSrc={tmpIcon}
               title="Temperatura corpului"
               value={measurements.temperatura}
               unit="°C"
               status={{ text: "Aveți grijă!", color: "yellow" }}
-              extraValue={{ value: `${measurements.umiditate}`, unit: "%" }}
+              showHumidityIcon={false}
+            />
+            <MeasurementCard
+              imageSrc={humIcon}
+              title="Umiditatea"
+              value={measurements.umiditate}
+              unit="%"
+              status={{ text: "Normal", color: "green" }}
+              showHumidityIcon={true}
             />
             <div className="col-span-2">
               <ECGGraph />
