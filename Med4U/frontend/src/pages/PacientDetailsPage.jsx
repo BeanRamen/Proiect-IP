@@ -9,6 +9,7 @@ import MeasurementCard from "../components/MeasurementCard";
 import ECGGraph from "../components/ECGGraph";
 import RecomandariList from "../components/RecomandariList";
 import IstoricRecomandari from "../components/IstoricRecomandari";
+import FisaMedicalaPdf from "../components/FisaMedicalaPdf";
 
 import bpmIcon from "../assets/bpm.svg";
 import tmpIcon from "../assets/tmp.svg";
@@ -99,6 +100,12 @@ const PacientDetailsPage = () => {
       </div>
       <div id="istoric" className="mt-8 w-4/5 mx-auto">
         <IstoricRecomandari pacientId={pacientId} />
+      </div>
+      <div className="mt-8 w-4/5 mx-auto">
+        <h1 className=" py-6 bg-[#147B72] text-white text-center font-semibold text-2xl">
+          FISA MEDICALA
+        </h1>
+        <FisaMedicalaPdf />
       </div>
     </div>
   );
