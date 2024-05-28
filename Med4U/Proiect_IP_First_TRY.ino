@@ -2,6 +2,7 @@
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 
+
 // Pin Definitions
 #define dhtPin D4           
 #define dhtType DHT11
@@ -89,7 +90,8 @@ void loop() {
       heatIndexC = dht.computeHeatIndex(tempValC, humidityVal, false);
 
       int ecgValue = readECG();
-      
+      int parafa =1345; 
+      const char* cnp_utilizator="4213244123143";
       // ECG
       if (ecgValue != 1024) { // Verificăm dacă valoarea nu este maximă constantă
         Serial.println(ecgValue);
@@ -118,7 +120,7 @@ void loop() {
         if (now - lastMsg > 2000) {
           lastMsg = now;
           float randomPulse = generateRandomPulse();
-          snprintf(msg, MSG_BUFFER_SIZE, "Temperatura : %.2f; Puls: %.2f; ECG: %d; Umiditate: %.2f", tempValC, randomPulse, ecgValue, humidityVal);
+          snprintf(msg, MSG_BUFFER_SIZE, "Parafa: %d; CNP: %s; Temperatura : %.2f; Puls: %.2f; ECG: %d; Umiditate: %.2f", parafa,cnp_utilizator, tempValC, randomPulse, ecgValue, humidityVal);
           Serial.print("Publish message: ");
           Serial.println(msg);
           client.publish("test", msg);
@@ -218,6 +220,6 @@ float readHumidity() {
 }
 
 float generateRandomPulse() {
-  float randomPulse = 60 + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (110 - 60)));
+  float randomPulse = 60 + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (80 - 60)));
   return randomPulse;
 }
