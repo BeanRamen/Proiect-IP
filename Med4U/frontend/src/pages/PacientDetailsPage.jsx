@@ -9,6 +9,8 @@ import MeasurementCard from "../components/MeasurementCard";
 import ECGGraph from "../components/ECGGraph";
 import RecomandariList from "../components/RecomandariList";
 import IstoricRecomandari from "../components/IstoricRecomandari";
+import bpmIcon from "../assets/bpm.svg";
+import tempIcon from "../assets/tmp.svg";
 
 const PacientDetailsPage = () => {
   const { pacientId } = useParams();
@@ -17,6 +19,7 @@ const PacientDetailsPage = () => {
   const [measurements, setMeasurements] = useState({
     puls: 98,
     temperatura: 38.3,
+    umiditate: 45,
     ecg: [],
   });
 
@@ -47,25 +50,23 @@ const PacientDetailsPage = () => {
     <div className="min-h-screen bg-gray-100">
       <Navbar pacient={pacient} />
       <div className="p-8 w-4/5 mx-auto">
-        <Typography variant="h4" className="text-center text-[#147B72] mb-8">
-          Statusul măsurătorilor de astăzi
-        </Typography>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <StatusText />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <MeasurementCard
-              imageSrc="/bpm.svg"
+              imageSrc={bpmIcon}
               title="Bătăile inimii"
               value={measurements.puls}
               unit="bpm"
               status={{ text: "Normal", color: "green" }}
             />
             <MeasurementCard
-              imageSrc="/temp.svg"
+              imageSrc={tempIcon}
               title="Temperatura corpului"
               value={measurements.temperatura}
               unit="°C"
               status={{ text: "Aveți grijă!", color: "yellow" }}
+              extraValue={{ value: `${measurements.umiditate}`, unit: "%" }}
             />
             <div className="col-span-2">
               <ECGGraph />
