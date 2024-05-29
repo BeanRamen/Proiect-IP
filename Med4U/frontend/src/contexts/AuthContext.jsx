@@ -39,6 +39,7 @@ export const AuthProvider = ({ children }) => {
       try {
         const user = JSON.parse(storedUser);
         setUser(user);
+        console.log("Logged in user:", user);
       } catch (error) {
         console.error("Failed to parse user from localStorage", error);
         logout();

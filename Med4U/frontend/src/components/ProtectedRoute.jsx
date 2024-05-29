@@ -13,6 +13,9 @@ const ProtectedRoute = ({ children, requiredRole }) => {
     return <Navigate to="/" />;
   }
 
+  console.log("ProtectedRoute: user =", user);
+  console.log("ProtectedRoute: requiredRole =", requiredRole);
+
   return children;
 };
 

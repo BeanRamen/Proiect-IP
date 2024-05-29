@@ -1,8 +1,11 @@
 import React, { useRef, useState } from "react";
 import { useReactToPrint } from "react-to-print";
-import { TextField, Button, TextareaAutosize } from "@mui/material";
+import { TextField, Button } from "@mui/material";
+import { useAuth } from "../contexts/AuthContext";
+import Logo from "../assets/LogoappLogo.png";
 
 const FisaMedicalaPdf = () => {
+  const { user } = useAuth();
   const componentRef = useRef();
   const [judet, setJudet] = useState("");
   const [localitate, setLocalitate] = useState("");
@@ -55,159 +58,12 @@ const FisaMedicalaPdf = () => {
 
   return (
     <div className="p-4 bg-gray-200">
-      <div className="grid grid-cols-2 gap-4 mb-4">
-        <TextField
-          label="Județ"
-          placeholder="Județ"
-          value={judet}
-          onChange={(e) => setJudet(e.target.value)}
-        />
-        <TextField
-          label="Localitate"
-          placeholder="Localitate"
-          value={localitate}
-          onChange={(e) => setLocalitate(e.target.value)}
-        />
-        <TextField
-          label="Unitatea sanitară"
-          placeholder="Unitatea sanitară"
-          value={unitateSanitara}
-          onChange={(e) => setUnitateSanitara(e.target.value)}
-        />
-      </div>
-
-      <div className="grid grid-cols-2 gap-4 mb-4  pr-8">
-        <TextField
-          label="NR"
-          placeholder="NR"
-          value={nr}
-          onChange={(e) => setNr(e.target.value)}
-        />
-        <div>
-          <label className="block text-sm font-bold mb-2">
-            Cod numeric personal
-          </label>
-          <div className="flex space-x-2">
-            {cnp.map((digit, index) => (
-              <TextField
-                key={index}
-                inputProps={{ maxLength: 1 }}
-                value={digit}
-                onChange={(e) => handleCnpChange(index, e.target.value)}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-3 gap-4 mb-4">
-        <TextField
-          label="Numele"
-          placeholder="Numele"
-          value={nume}
-          onChange={(e) => setNume(e.target.value)}
-        />
-        <TextField
-          label="Prenumele"
-          placeholder="Prenumele"
-          value={prenume}
-          onChange={(e) => setPrenume(e.target.value)}
-        />
-        <TextField
-          label="Sexul"
-          placeholder="Sexul"
-          value={sex}
-          onChange={(e) => setSex(e.target.value)}
-        />
-      </div>
-
-      <div className="grid grid-cols-4 gap-4 mb-4">
-        <TextField
-          label="Anul nașterii"
-          placeholder="Anul"
-          value={an}
-          onChange={(e) => setAn(e.target.value)}
-        />
-        <TextField
-          label="Luna nașterii"
-          placeholder="Luna"
-          value={luna}
-          onChange={(e) => setLuna(e.target.value)}
-        />
-        <TextField
-          label="Ziua nașterii"
-          placeholder="Ziua"
-          value={ziua}
-          onChange={(e) => setZiua(e.target.value)}
-        />
-        <TextField
-          label="Starea civilă"
-          placeholder="Starea civilă"
-          value={stareCivila}
-          onChange={(e) => setStareCivila(e.target.value)}
-        />
-      </div>
-
-      <div className="grid grid-cols-3 gap-4 mb-4">
-        <TextField
-          label="Localitatea domiciliului"
-          placeholder="Localitatea domiciliului"
-          value={localitateDomiciliu}
-          onChange={(e) => setLocalitateDomiciliu(e.target.value)}
-        />
-        <TextField
-          label="Strada"
-          placeholder="Strada"
-          value={strada}
-          onChange={(e) => setStrada(e.target.value)}
-        />
-        <TextField
-          label="Nr."
-          placeholder="Nr."
-          value={nrDomiciliu}
-          onChange={(e) => setNrDomiciliu(e.target.value)}
-        />
-      </div>
-
-      <div className="grid grid-cols-2 gap-4 mb-4">
-        <TextField
-          label="Domiciliu schimbat"
-          placeholder="Domiciliu schimbat"
-          value={domiciliuSchimbat}
-          onChange={(e) => setDomiciliuSchimbat(e.target.value)}
-        />
-        <TextField
-          label="Loc de muncă"
-          placeholder="Loc de muncă"
-          value={locDeMunca}
-          onChange={(e) => setLocDeMunca(e.target.value)}
-        />
-      </div>
-
-      <div className="grid grid-cols-2 gap-4 mb-4">
-        <TextField
-          label="Antecedente colaterale"
-          placeholder="Antecedente colaterale"
-          value={antecedenteColaterale}
-          onChange={(e) => setAntecedenteColaterale(e.target.value)}
-        />
-        <TextField
-          label="Personale"
-          placeholder="Personale"
-          value={personale}
-          onChange={(e) => setPersonale(e.target.value)}
-        />
-        <TextField
-          label="Conditii de munca"
-          placeholder="Conditii de munca"
-          value={conditiiMunca}
-          onChange={(e) => setConditiiMunca(e.target.value)}
-        />
-      </div>
-
-      <div ref={componentRef} className="border p-4 border-black border-10">
-        <div className="flex justify-between">
-          <div>
+      <div
+        ref={componentRef}
+        className="border p-4 border-black border-10 bg-white mb-10"
+      >
+        <div className="flex justify-between flex-wrap">
+          <div className="flex flex-col">
             <p>
               <strong>Județ:</strong> {judet}
             </p>
@@ -218,7 +74,7 @@ const FisaMedicalaPdf = () => {
               <strong>Unitatea sanitară:</strong> {unitateSanitara}
             </p>
           </div>
-          <div>
+          <div className="flex flex-col">
             <p>
               <strong>NR:</strong> {nr}
             </p>
@@ -233,7 +89,7 @@ const FisaMedicalaPdf = () => {
         <h1 className="text-center font-bold">FIȘA DE CONSULTAȚII MEDICALE</h1>
         <h2 className="text-center mb-4">- ADULȚI -</h2>
 
-        <div className="grid grid-cols-3 gap-2 mb-2">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-2">
           <p className="col-span-1">
             <strong>Numele:</strong> {nume}
           </p>
@@ -245,7 +101,7 @@ const FisaMedicalaPdf = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-4 gap-2 mb-2">
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 mb-2">
           <p className="col-span-1">
             <strong>Data nașterii: anul:</strong> {an}
           </p>
@@ -260,7 +116,7 @@ const FisaMedicalaPdf = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-3 gap-2 mb-2">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-2">
           <p className="col-span-1">
             <strong>Domiciliul: localitatea:</strong> {localitateDomiciliu}
           </p>
@@ -274,8 +130,8 @@ const FisaMedicalaPdf = () => {
 
         <hr className="mb-4" />
 
-        <h3 className="text-center mb-4">Schimbări de</h3>
-        <div className="grid grid-cols-2 gap-4 mb-4">
+        <h3 className="text-center mb-4 font-bold">Schimbări de</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <div>
             <p className="text-center">
               <strong>domiciliu schimbat:</strong>
@@ -360,79 +216,270 @@ const FisaMedicalaPdf = () => {
             </p>
           </div>
         </div>
-      </div>
 
-      <div className="grid grid-cols-7 gap-4 mt-12">
-        {Array.from({ length: 4 }).map((_, rowIndex) => (
-          <React.Fragment key={rowIndex}>
-            <TextField
-              label={`Data (Row ${rowIndex + 1})`}
-              placeholder={`Data (Row ${rowIndex + 1})`}
-              value={tableData.date[rowIndex]}
-              onChange={(e) =>
-                handleTableChange(rowIndex, "date", e.target.value)
-              }
-            />
-            <TextField
-              label={`Locul Consultației (Row ${rowIndex + 1})`}
-              placeholder={`Locul Consultației (Row ${rowIndex + 1})`}
-              value={tableData.locConsultatie[rowIndex]}
-              onChange={(e) =>
-                handleTableChange(rowIndex, "locConsultatie", e.target.value)
-              }
-            />
-            <TextField
-              label={`Simptome (Row ${rowIndex + 1})`}
-              placeholder={`Simptome (Row ${rowIndex + 1})`}
-              value={tableData.simptome[rowIndex]}
-              onChange={(e) =>
-                handleTableChange(rowIndex, "simptome", e.target.value)
-              }
-            />
-            <TextField
-              label={`Diagnostic (Row ${rowIndex + 1})`}
-              placeholder={`Diagnostic (Row ${rowIndex + 1})`}
-              value={tableData.diagnostic[rowIndex]}
-              onChange={(e) =>
-                handleTableChange(rowIndex, "diagnostic", e.target.value)
-              }
-            />
-            <TextField
-              label={`Codul (Row ${rowIndex + 1})`}
-              placeholder={`Codul (Row ${rowIndex + 1})`}
-              value={tableData.codul[rowIndex]}
-              onChange={(e) =>
-                handleTableChange(rowIndex, "codul", e.target.value)
-              }
-            />
-            <TextField
-              label={`Prescripții/Recomandări (Row ${rowIndex + 1})`}
-              placeholder={`Prescripții/Recomandări (Row ${rowIndex + 1})`}
-              value={tableData.prescriptii[rowIndex]}
-              onChange={(e) =>
-                handleTableChange(rowIndex, "prescriptii", e.target.value)
-              }
-            />
-            <TextField
-              label={`Concediu (Row ${rowIndex + 1})`}
-              placeholder={`Concediu (Row ${rowIndex + 1})`}
-              value={tableData.concediu[rowIndex]}
-              onChange={(e) =>
-                handleTableChange(rowIndex, "concediu", e.target.value)
-              }
-            />
-          </React.Fragment>
-        ))}
+        <img
+          src={Logo}
+          alt=""
+          className="flex justify-center  items-end w-32 h-24 mt-6"
+        />
       </div>
+      {user?.role === "medic" && (
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+            <TextField
+              label="Județ"
+              placeholder="Județ"
+              value={judet}
+              onChange={(e) => setJudet(e.target.value)}
+              fullWidth
+            />
+            <TextField
+              label="Localitate"
+              placeholder="Localitate"
+              value={localitate}
+              onChange={(e) => setLocalitate(e.target.value)}
+              fullWidth
+            />
+            <TextField
+              label="Unitatea sanitară"
+              placeholder="Unitatea sanitară"
+              value={unitateSanitara}
+              onChange={(e) => setUnitateSanitara(e.target.value)}
+              fullWidth
+            />
+          </div>
 
-      <Button
-        onClick={handlePrint}
-        variant="contained"
-        color="primary"
-        className="mt-8"
-      >
-        Print this
-      </Button>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+            <TextField
+              label="NR"
+              placeholder="NR"
+              value={nr}
+              onChange={(e) => setNr(e.target.value)}
+              fullWidth
+            />
+            <div>
+              <label className="block text-sm font-bold mb-2">
+                Cod numeric personal
+              </label>
+              <div className="flex space-x-2">
+                {cnp.map((digit, index) => (
+                  <TextField
+                    key={index}
+                    inputProps={{ maxLength: 1 }}
+                    value={digit}
+                    onChange={(e) => handleCnpChange(index, e.target.value)}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+            <TextField
+              label="Numele"
+              placeholder="Numele"
+              value={nume}
+              onChange={(e) => setNume(e.target.value)}
+              fullWidth
+            />
+            <TextField
+              label="Prenumele"
+              placeholder="Prenumele"
+              value={prenume}
+              onChange={(e) => setPrenume(e.target.value)}
+              fullWidth
+            />
+            <TextField
+              label="Sexul"
+              placeholder="Sexul"
+              value={sex}
+              onChange={(e) => setSex(e.target.value)}
+              fullWidth
+            />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-4">
+            <TextField
+              label="Anul nașterii"
+              placeholder="Anul"
+              value={an}
+              onChange={(e) => setAn(e.target.value)}
+              fullWidth
+            />
+            <TextField
+              label="Luna nașterii"
+              placeholder="Luna"
+              value={luna}
+              onChange={(e) => setLuna(e.target.value)}
+              fullWidth
+            />
+            <TextField
+              label="Ziua nașterii"
+              placeholder="Ziua"
+              value={ziua}
+              onChange={(e) => setZiua(e.target.value)}
+              fullWidth
+            />
+            <TextField
+              label="Starea civilă"
+              placeholder="Starea civilă"
+              value={stareCivila}
+              onChange={(e) => setStareCivila(e.target.value)}
+              fullWidth
+            />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+            <TextField
+              label="Localitatea domiciliului"
+              placeholder="Localitatea domiciliului"
+              value={localitateDomiciliu}
+              onChange={(e) => setLocalitateDomiciliu(e.target.value)}
+              fullWidth
+            />
+            <TextField
+              label="Strada"
+              placeholder="Strada"
+              value={strada}
+              onChange={(e) => setStrada(e.target.value)}
+              fullWidth
+            />
+            <TextField
+              label="Nr."
+              placeholder="Nr."
+              value={nrDomiciliu}
+              onChange={(e) => setNrDomiciliu(e.target.value)}
+              fullWidth
+            />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+            <TextField
+              label="Domiciliu schimbat"
+              placeholder="Domiciliu schimbat"
+              value={domiciliuSchimbat}
+              onChange={(e) => setDomiciliuSchimbat(e.target.value)}
+              fullWidth
+            />
+            <TextField
+              label="Loc de muncă"
+              placeholder="Loc de muncă"
+              value={locDeMunca}
+              onChange={(e) => setLocDeMunca(e.target.value)}
+              fullWidth
+            />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+            <TextField
+              label="Antecedente colaterale"
+              placeholder="Antecedente colaterale"
+              value={antecedenteColaterale}
+              onChange={(e) => setAntecedenteColaterale(e.target.value)}
+              fullWidth
+            />
+            <TextField
+              label="Personale"
+              placeholder="Personale"
+              value={personale}
+              onChange={(e) => setPersonale(e.target.value)}
+              fullWidth
+            />
+            <TextField
+              label="Conditii de munca"
+              placeholder="Conditii de munca"
+              value={conditiiMunca}
+              onChange={(e) => setConditiiMunca(e.target.value)}
+              fullWidth
+            />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-7 gap-4 mt-12">
+            {Array.from({ length: 4 }).map((_, rowIndex) => (
+              <React.Fragment key={rowIndex}>
+                <TextField
+                  label={`Data (Row ${rowIndex + 1})`}
+                  placeholder={`Data (Row ${rowIndex + 1})`}
+                  value={tableData.date[rowIndex]}
+                  onChange={(e) =>
+                    handleTableChange(rowIndex, "date", e.target.value)
+                  }
+                  fullWidth
+                />
+                <TextField
+                  label={`Locul Consultației (Row ${rowIndex + 1})`}
+                  placeholder={`Locul Consultației (Row ${rowIndex + 1})`}
+                  value={tableData.locConsultatie[rowIndex]}
+                  onChange={(e) =>
+                    handleTableChange(
+                      rowIndex,
+                      "locConsultatie",
+                      e.target.value
+                    )
+                  }
+                  fullWidth
+                />
+                <TextField
+                  label={`Simptome (Row ${rowIndex + 1})`}
+                  placeholder={`Simptome (Row ${rowIndex + 1})`}
+                  value={tableData.simptome[rowIndex]}
+                  onChange={(e) =>
+                    handleTableChange(rowIndex, "simptome", e.target.value)
+                  }
+                  fullWidth
+                />
+                <TextField
+                  label={`Diagnostic (Row ${rowIndex + 1})`}
+                  placeholder={`Diagnostic (Row ${rowIndex + 1})`}
+                  value={tableData.diagnostic[rowIndex]}
+                  onChange={(e) =>
+                    handleTableChange(rowIndex, "diagnostic", e.target.value)
+                  }
+                  fullWidth
+                />
+                <TextField
+                  label={`Codul (Row ${rowIndex + 1})`}
+                  placeholder={`Codul (Row ${rowIndex + 1})`}
+                  value={tableData.codul[rowIndex]}
+                  onChange={(e) =>
+                    handleTableChange(rowIndex, "codul", e.target.value)
+                  }
+                  fullWidth
+                />
+                <TextField
+                  label={`Prescripții/Recomandări (Row ${rowIndex + 1})`}
+                  placeholder={`Prescripții/Recomandări (Row ${rowIndex + 1})`}
+                  value={tableData.prescriptii[rowIndex]}
+                  onChange={(e) =>
+                    handleTableChange(rowIndex, "prescriptii", e.target.value)
+                  }
+                  fullWidth
+                />
+                <TextField
+                  label={`Concediu (Row ${rowIndex + 1})`}
+                  placeholder={`Concediu (Row ${rowIndex + 1})`}
+                  value={tableData.concediu[rowIndex]}
+                  onChange={(e) =>
+                    handleTableChange(rowIndex, "concediu", e.target.value)
+                  }
+                  fullWidth
+                />
+              </React.Fragment>
+            ))}
+          </div>
+        </>
+      )}
+
+      {user?.role === "medic" && (
+        <Button
+          onClick={handlePrint}
+          variant="contained"
+          color="primary"
+          className="mt-8"
+        >
+          Print this
+        </Button>
+      )}
     </div>
   );
 };

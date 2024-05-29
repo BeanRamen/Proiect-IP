@@ -101,7 +101,7 @@ const PacientDetailsPage = () => {
       <div id="istoric" className="mt-8 w-4/5 mx-auto">
         <IstoricRecomandari pacientId={pacientId} />
       </div>
-      <div className="mt-8 w-4/5 mx-auto">
+      <div className="mt-8 w-4/5 mx-auto" id="fisa-medicala">
         <h1 className=" py-6 bg-[#147B72] text-white text-center font-semibold text-2xl">
           FISA MEDICALA
         </h1>
