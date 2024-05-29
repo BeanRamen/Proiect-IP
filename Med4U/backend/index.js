@@ -23,7 +23,10 @@ app.options("*", (req, res) => {
 });
 
 const authRoute = require("./routes/authRoute");
+const ecgRoute = require("./routes/ecgRoute");
+
 app.use("/api/auth", authRoute);
+app.use("/api/ecg", ecgRoute);
 
 mongoose
   .connect(DB_URL, connectionParams)

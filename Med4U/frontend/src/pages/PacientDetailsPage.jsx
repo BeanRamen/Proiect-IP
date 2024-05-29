@@ -28,24 +28,23 @@ const PacientDetailsPage = () => {
   useEffect(() => {
     const fetchPacientDetails = async () => {
       try {
-        const response = await fetch(
-          `http://${backendURL}:3000/api/auth/pacienti/${pacientId}`
-        );
+        // Preluăm toate datele ECG
+        const response = await fetch(`http://${backendURL}:3000/api/ecg`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        const data = await response.json();
-        setPacient(data.pacient);
+        const ecgData = await response.json();
+
         setMeasurements({
-          puls: data.ecgData[0]?.puls || 0,
-          temperatura: data.ecgData[0]?.temperatura || 0,
-          umiditate: data.ecgData[0]?.umiditate || 0,
-          ecg: data.ecgData[0]?.ecg || [],
+          puls: ecgData[0]?.puls || 0,
+          temperatura: ecgData[0]?.temperatura || 0,
+          umiditate: ecgData[0]?.umiditate || 0,
+          ecg: ecgData.map((data) => data.ecg) || [],
         });
-        console.log("pacient data:", data.pacient);
-        console.log("ECG data:", data.ecgData);
+        console.log("ECG data:", ecgData);
       } catch (error) {
-        console.error("Error fetching pacient details:", error);
+        console.error("Error fetching ECG data:", error);
+        setError(error.message);
       }
     };
 
