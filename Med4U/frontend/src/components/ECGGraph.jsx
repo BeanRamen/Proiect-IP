@@ -24,6 +24,7 @@ ChartJS.register(
 
 export const options = {
   responsive: true,
+  maintainAspectRatio: true,
   interaction: {
     mode: "index",
     intersect: false,
@@ -59,16 +60,22 @@ const ECGGraph = ({ ecgData }) => {
       {
         label: "ECG Data",
         data: ecgData,
-        borderColor: "rgb(53, 162, 235)",
-        backgroundColor: "rgba(53, 162, 235, 0.5)",
+        borderColor: "rgb(139, 0, 0)",
+        backgroundColor: "rgba(139, 0, 0, 0.5)",
         yAxisID: "y",
       },
     ],
   };
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-lg">
-      <div className="h-64">
+    <div
+      className="bg-white p-6 rounded-xl shadow-lg"
+      style={{ height: "100%" }}
+    >
+      <div
+        className="h-64 sm:h-96 md:h-auto"
+        style={{ position: "relative", width: "100%", height: "100%" }}
+      >
         <Typography className="text-[#147B72] mb-4 text-center">
           ECG Graph
         </Typography>

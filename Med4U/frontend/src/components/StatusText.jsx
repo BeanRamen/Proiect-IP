@@ -11,14 +11,14 @@ const StatusText = () => {
         <Typography className="text-green-600 font-bold">
           Felicitări!
         </Typography>
-        <Typography>Pulsul este bun</Typography>
+        <Typography>Datele se încadrează în parametrii normali!</Typography>
       </div>
       <div className="text-center">
         <Typography className="text-yellow-600 font-bold">
           Aveți grijă!
         </Typography>
         <Typography>
-          Temperatura corpului este destul de mare{" "}
+          Parametrii se apropie de valori prea mari!{" "}
           <a href="#recomandari" className="text-[#147B72]">
             vezi recomandări
           </a>
@@ -27,7 +27,7 @@ const StatusText = () => {
       <div className="text-center">
         <Typography className="text-red-600 font-bold">Atenție!</Typography>
         <Typography>
-          ECG-ul nu arată bine{" "}
+          Parametrii sunt prea mari!{" "}
           <a href="#recomandari" className="text-[#147B72]">
             vezi recomandări
           </a>

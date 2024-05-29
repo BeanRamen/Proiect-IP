@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useReactToPrint } from "react-to-print";
 import { TextField, Button } from "@mui/material";
 import { useAuth } from "../contexts/AuthContext";
@@ -7,36 +7,144 @@ import Logo from "../assets/LogoappLogo.png";
 const FisaMedicalaPdf = () => {
   const { user } = useAuth();
   const componentRef = useRef();
-  const [judet, setJudet] = useState("");
-  const [localitate, setLocalitate] = useState("");
-  const [unitateSanitara, setUnitateSanitara] = useState("");
-  const [nr, setNr] = useState("");
-  const [cnp, setCnp] = useState(Array(13).fill(""));
+  const [judet, setJudet] = useState(localStorage.getItem("judet") || "");
+  const [localitate, setLocalitate] = useState(
+    localStorage.getItem("localitate") || ""
+  );
+  const [unitateSanitara, setUnitateSanitara] = useState(
+    localStorage.getItem("unitateSanitara") || ""
+  );
+  const [nr, setNr] = useState(localStorage.getItem("nr") || "");
+  const [cnp, setCnp] = useState(
+    JSON.parse(localStorage.getItem("cnp")) || Array(13).fill("")
+  );
 
-  const [nume, setNume] = useState("");
-  const [prenume, setPrenume] = useState("");
-  const [sex, setSex] = useState("");
-  const [an, setAn] = useState("");
-  const [luna, setLuna] = useState("");
-  const [ziua, setZiua] = useState("");
-  const [stareCivila, setStareCivila] = useState("");
-  const [localitateDomiciliu, setLocalitateDomiciliu] = useState("");
-  const [strada, setStrada] = useState("");
-  const [nrDomiciliu, setNrDomiciliu] = useState("");
-  const [domiciliuSchimbat, setDomiciliuSchimbat] = useState("");
-  const [locDeMunca, setLocDeMunca] = useState("");
-  const [antecedenteColaterale, setAntecedenteColaterale] = useState("");
-  const [personale, setPersonale] = useState("");
-  const [conditiiMunca, setConditiiMunca] = useState("");
-  const [tableData, setTableData] = useState({
-    date: ["", "", "", ""],
-    locConsultatie: ["", "", "", ""],
-    simptome: ["", "", "", ""],
-    diagnostic: ["", "", "", ""],
-    codul: ["", "", "", ""],
-    prescriptii: ["", "", "", ""],
-    concediu: ["", "", "", ""],
-  });
+  const [nume, setNume] = useState(localStorage.getItem("nume") || "");
+  const [prenume, setPrenume] = useState(localStorage.getItem("prenume") || "");
+  const [sex, setSex] = useState(localStorage.getItem("sex") || "");
+  const [an, setAn] = useState(localStorage.getItem("an") || "");
+  const [luna, setLuna] = useState(localStorage.getItem("luna") || "");
+  const [ziua, setZiua] = useState(localStorage.getItem("ziua") || "");
+  const [stareCivila, setStareCivila] = useState(
+    localStorage.getItem("stareCivila") || ""
+  );
+  const [localitateDomiciliu, setLocalitateDomiciliu] = useState(
+    localStorage.getItem("localitateDomiciliu") || ""
+  );
+  const [strada, setStrada] = useState(localStorage.getItem("strada") || "");
+  const [nrDomiciliu, setNrDomiciliu] = useState(
+    localStorage.getItem("nrDomiciliu") || ""
+  );
+  const [domiciliuSchimbat, setDomiciliuSchimbat] = useState(
+    localStorage.getItem("domiciliuSchimbat") || ""
+  );
+  const [locDeMunca, setLocDeMunca] = useState(
+    localStorage.getItem("locDeMunca") || ""
+  );
+  const [antecedenteColaterale, setAntecedenteColaterale] = useState(
+    localStorage.getItem("antecedenteColaterale") || ""
+  );
+  const [personale, setPersonale] = useState(
+    localStorage.getItem("personale") || ""
+  );
+  const [conditiiMunca, setConditiiMunca] = useState(
+    localStorage.getItem("conditiiMunca") || ""
+  );
+  const [tableData, setTableData] = useState(
+    JSON.parse(localStorage.getItem("tableData")) || {
+      date: ["", "", "", ""],
+      locConsultatie: ["", "", "", ""],
+      simptome: ["", "", "", ""],
+      diagnostic: ["", "", "", ""],
+      codul: ["", "", "", ""],
+      prescriptii: ["", "", "", ""],
+      concediu: ["", "", "", ""],
+    }
+  );
+
+  useEffect(() => {
+    localStorage.setItem("judet", judet);
+  }, [judet]);
+
+  useEffect(() => {
+    localStorage.setItem("localitate", localitate);
+  }, [localitate]);
+
+  useEffect(() => {
+    localStorage.setItem("unitateSanitara", unitateSanitara);
+  }, [unitateSanitara]);
+
+  useEffect(() => {
+    localStorage.setItem("nr", nr);
+  }, [nr]);
+
+  useEffect(() => {
+    localStorage.setItem("cnp", JSON.stringify(cnp));
+  }, [cnp]);
+
+  useEffect(() => {
+    localStorage.setItem("nume", nume);
+  }, [nume]);
+
+  useEffect(() => {
+    localStorage.setItem("prenume", prenume);
+  }, [prenume]);
+
+  useEffect(() => {
+    localStorage.setItem("sex", sex);
+  }, [sex]);
+
+  useEffect(() => {
+    localStorage.setItem("an", an);
+  }, [an]);
+
+  useEffect(() => {
+    localStorage.setItem("luna", luna);
+  }, [luna]);
+
+  useEffect(() => {
+    localStorage.setItem("ziua", ziua);
+  }, [ziua]);
+
+  useEffect(() => {
+    localStorage.setItem("stareCivila", stareCivila);
+  }, [stareCivila]);
+
+  useEffect(() => {
+    localStorage.setItem("localitateDomiciliu", localitateDomiciliu);
+  }, [localitateDomiciliu]);
+
+  useEffect(() => {
+    localStorage.setItem("strada", strada);
+  }, [strada]);
+
+  useEffect(() => {
+    localStorage.setItem("nrDomiciliu", nrDomiciliu);
+  }, [nrDomiciliu]);
+
+  useEffect(() => {
+    localStorage.setItem("domiciliuSchimbat", domiciliuSchimbat);
+  }, [domiciliuSchimbat]);
+
+  useEffect(() => {
+    localStorage.setItem("locDeMunca", locDeMunca);
+  }, [locDeMunca]);
+
+  useEffect(() => {
+    localStorage.setItem("antecedenteColaterale", antecedenteColaterale);
+  }, [antecedenteColaterale]);
+
+  useEffect(() => {
+    localStorage.setItem("personale", personale);
+  }, [personale]);
+
+  useEffect(() => {
+    localStorage.setItem("conditiiMunca", conditiiMunca);
+  }, [conditiiMunca]);
+
+  useEffect(() => {
+    localStorage.setItem("tableData", JSON.stringify(tableData));
+  }, [tableData]);
 
   const handleTableChange = (index, field, value) => {
     const newData = { ...tableData };
@@ -88,7 +196,6 @@ const FisaMedicalaPdf = () => {
         </div>
         <h1 className="text-center font-bold">FIȘA DE CONSULTAȚII MEDICALE</h1>
         <h2 className="text-center mb-4">- ADULȚI -</h2>
-
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-2">
           <p className="col-span-1">
             <strong>Numele:</strong> {nume}
@@ -100,7 +207,6 @@ const FisaMedicalaPdf = () => {
             <strong>Sexul:</strong> {sex}
           </p>
         </div>
-
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 mb-2">
           <p className="col-span-1">
             <strong>Data nașterii: anul:</strong> {an}
@@ -115,7 +221,6 @@ const FisaMedicalaPdf = () => {
             <strong>Starea civilă:</strong> {stareCivila}
           </p>
         </div>
-
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-2">
           <p className="col-span-1">
             <strong>Domiciliul: localitatea:</strong> {localitateDomiciliu}
@@ -127,9 +232,7 @@ const FisaMedicalaPdf = () => {
             <strong>nr.:</strong> {nrDomiciliu}
           </p>
         </div>
-
         <hr className="mb-4" />
-
         <h3 className="text-center mb-4 font-bold">Schimbări de</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <div>
@@ -145,7 +248,6 @@ const FisaMedicalaPdf = () => {
             <p className="text-center">{locDeMunca}</p>
           </div>
         </div>
-
         <div className="mb-2">
           <p className="mb-12">
             <strong>Antecedente heredo-colaterale:</strong>
@@ -158,53 +260,56 @@ const FisaMedicalaPdf = () => {
             <strong>Conditii de munca: </strong> {conditiiMunca}
           </p>
         </div>
-
-        <table className="table-auto w-full mb-4 border-collapse border border-gray-400">
-          <thead>
-            <tr>
-              <th className="border border-gray-300 p-2">
-                Data: anul/luna/ziua
-              </th>
-              <th className="border border-gray-300 p-2">Locul Consultației</th>
-              <th className="border border-gray-300 p-2">Simptome</th>
-              <th className="border border-gray-300 p-2">Diagnostic</th>
-              <th className="border border-gray-300 p-2">Codul</th>
-              <th className="border border-gray-300 p-2">
-                Prescripții/Recomandări
-              </th>
-              <th className="border border-gray-300 p-2">
-                Nr. zile concediu medical; Nr. certificat
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {Array.from({ length: 4 }).map((_, rowIndex) => (
-              <tr key={rowIndex}>
-                <td className="border border-gray-300 p-2">
-                  {tableData.date[rowIndex]}
-                </td>
-                <td className="border border-gray-300 p-2">
-                  {tableData.locConsultatie[rowIndex]}
-                </td>
-                <td className="border border-gray-300 p-2">
-                  {tableData.simptome[rowIndex]}
-                </td>
-                <td className="border border-gray-300 p-2">
-                  {tableData.diagnostic[rowIndex]}
-                </td>
-                <td className="border border-gray-300 p-2">
-                  {tableData.codul[rowIndex]}
-                </td>
-                <td className="border border-gray-300 p-2">
-                  {tableData.prescriptii[rowIndex]}
-                </td>
-                <td className="border border-gray-300 p-2">
-                  {tableData.concediu[rowIndex]}
-                </td>
+        <div className="overflow-x-auto">
+          <table className="table-auto w-full mb-4 border-collapse border border-gray-400">
+            <thead>
+              <tr>
+                <th className="border border-gray-300 p-2">
+                  Data: anul/luna/ziua
+                </th>
+                <th className="border border-gray-300 p-2">
+                  Locul Consultației
+                </th>
+                <th className="border border-gray-300 p-2">Simptome</th>
+                <th className="border border-gray-300 p-2">Diagnostic</th>
+                <th className="border border-gray-300 p-2">Codul</th>
+                <th className="border border-gray-300 p-2">
+                  Prescripții/Recomandări
+                </th>
+                <th className="border border-gray-300 p-2">
+                  Nr. zile concediu medical; Nr. certificat
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {Array.from({ length: 4 }).map((_, rowIndex) => (
+                <tr key={rowIndex}>
+                  <td className="border border-gray-300 p-2">
+                    {tableData.date[rowIndex]}
+                  </td>
+                  <td className="border border-gray-300 p-2">
+                    {tableData.locConsultatie[rowIndex]}
+                  </td>
+                  <td className="border border-gray-300 p-2">
+                    {tableData.simptome[rowIndex]}
+                  </td>
+                  <td className="border border-gray-300 p-2">
+                    {tableData.diagnostic[rowIndex]}
+                  </td>
+                  <td className="border border-gray-300 p-2">
+                    {tableData.codul[rowIndex]}
+                  </td>
+                  <td className="border border-gray-300 p-2">
+                    {tableData.prescriptii[rowIndex]}
+                  </td>
+                  <td className="border border-gray-300 p-2">
+                    {tableData.concediu[rowIndex]}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
         <div className="mt-6">
           <div>
             <p>*C = cabinet; D = domiciliu.</p>
@@ -216,7 +321,6 @@ const FisaMedicalaPdf = () => {
             </p>
           </div>
         </div>
-
         <img
           src={Logo}
           alt=""
@@ -470,16 +574,18 @@ const FisaMedicalaPdf = () => {
         </>
       )}
 
-      {user?.role === "medic" && (
+      <div className="flex space-x-4 mt-8">
         <Button
           onClick={handlePrint}
           variant="contained"
-          color="primary"
-          className="mt-8"
+          sx={{
+            backgroundColor: "#147B72",
+            "&:hover": { backgroundColor: "#0e594f" },
+          }}
         >
-          Print this
+          Salvează PDF
         </Button>
-      )}
+      </div>
     </div>
   );
 };

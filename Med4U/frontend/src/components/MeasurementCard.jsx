@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardContent, Typography } from "@mui/material";
+import { Card, CardContent, Typography, Button } from "@mui/material";
 import tmpChrt from "../assets/tmpChrt.svg";
 
 const MeasurementCard = ({
@@ -30,7 +30,7 @@ const MeasurementCard = ({
         <Typography className={`text-${status.color}-600 mb-4`}>
           {status.text}
         </Typography>
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center items-center mb-4">
           {showHumidityIcon && (
             <img
               src="/assets/hum.svg"
