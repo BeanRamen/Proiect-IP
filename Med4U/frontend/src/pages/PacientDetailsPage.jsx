@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useParams, Navigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { backendURL } from "../constants/backendURL";
-import { Typography } from "@mui/material";
 import Navbar from "../components/Navbar";
 import StatusText from "../components/StatusText";
 import MeasurementCard from "../components/MeasurementCard";
@@ -38,11 +37,13 @@ const PacientDetailsPage = () => {
         const data = await response.json();
         setPacient(data.pacient);
         setMeasurements({
-          puls: data.ecgData?.puls || 0,
-          temperatura: data.ecgData?.temperatura || 0,
-          umiditate: data.ecgData?.umiditate || 0,
-          ecg: data.ecgData?.ecg || [],
+          puls: data.ecgData[0]?.puls || 0,
+          temperatura: data.ecgData[0]?.temperatura || 0,
+          umiditate: data.ecgData[0]?.umiditate || 0,
+          ecg: data.ecgData[0]?.ecg || [],
         });
+        console.log("pacient data:", data.pacient);
+        console.log("ECG data:", data.ecgData);
       } catch (error) {
         console.error("Error fetching pacient details:", error);
       }
@@ -87,7 +88,7 @@ const PacientDetailsPage = () => {
               showHumidityIcon={true}
             />
             <div className="col-span-2">
-              <ECGGraph />
+              <ECGGraph ecgData={measurements.ecg} />
             </div>
           </div>
         </div>

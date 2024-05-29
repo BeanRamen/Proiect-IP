@@ -12,6 +12,8 @@ router.get("/medici", authController.getMedici);
 router.get("/pacienti", authController.getPacienti);
 router.get("/pacienti/:id", authController.getPacientDetails);
 
+router.get("/ecgData/:pacientId", authController.getEcgData);
+
 router.get("/recomandari/:pacientId", authController.getRecomandari);
 router.post("/recomandari/:pacientId", authController.addRecomandare);
 router.delete("/recomandari/:pacientId/:id", authController.deleteRecomandare);
