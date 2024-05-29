@@ -24,35 +24,51 @@ const PacientDetailsPage = () => {
     umiditate: 0,
     ecg: [],
   });
+  const [error, setError] = useState(null);
+
+  const fetchPacientDetails = async () => {
+    try {
+      const response = await fetch(`http://${backendURL}:3000/api/ecg`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const ecgData = await response.json();
+
+      setMeasurements({
+        puls: ecgData[0]?.puls || 0,
+        temperatura: ecgData[0]?.temperatura || 0,
+        umiditate: ecgData[0]?.umiditate || 0,
+        ecg: ecgData.map((data) => data.ecg) || [],
+      });
+      console.log("ECG data:", ecgData);
+    } catch (error) {
+      console.error("Error fetching ECG data:", error);
+      setError(error.message);
+    }
+  };
 
   useEffect(() => {
-    const fetchPacientDetails = async () => {
-      try {
-        // Preluăm toate datele ECG
-        const response = await fetch(`http://${backendURL}:3000/api/ecg`);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const ecgData = await response.json();
+    fetchPacientDetails(); // Fetch initial data
+    const interval = setInterval(() => {
+      fetchPacientDetails(); // Fetch data every second
+    }, 1000);
 
-        setMeasurements({
-          puls: ecgData[0]?.puls || 0,
-          temperatura: ecgData[0]?.temperatura || 0,
-          umiditate: ecgData[0]?.umiditate || 0,
-          ecg: ecgData.map((data) => data.ecg) || [],
-        });
-        console.log("ECG data:", ecgData);
-      } catch (error) {
-        console.error("Error fetching ECG data:", error);
-        setError(error.message);
-      }
-    };
-
-    fetchPacientDetails();
+    return () => clearInterval(interval); // Cleanup interval on component unmount
   }, [pacientId]);
 
   if (!user) {
     return <Navigate to="/login" />;
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-100">
+        <Navbar pacient={pacient} />
+        <div className="p-8 w-4/5 mx-auto">
+          <p className="text-red-500">Error: {error}</p>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -102,7 +118,7 @@ const PacientDetailsPage = () => {
         <IstoricRecomandari pacientId={pacientId} />
       </div>
       <div className="mt-8 w-4/5 mx-auto" id="fisa-medicala">
-        <h1 className=" py-6 bg-[#147B72] text-white text-center font-semibold text-2xl">
+        <h1 className="py-6 bg-[#147B72] text-white text-center font-semibold text-2xl">
           FISA MEDICALA
         </h1>
         <FisaMedicalaPdf />
