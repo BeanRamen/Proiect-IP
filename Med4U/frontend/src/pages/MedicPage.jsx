@@ -8,10 +8,10 @@ import {
   LogoutOutlined,
   ArrowLeftOutlined,
 } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 
 const MedicPage = () => {
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
   const { pacienti, addPacient, loading, error } = useMedic();
   const [showAddForm, setShowAddForm] = useState(false);
   const navigate = useNavigate();
@@ -24,6 +24,10 @@ const MedicPage = () => {
   const handleCardClick = (pacientId) => {
     navigate(`/medic/pacient/${pacientId}`);
   };
+
+  if (!user) {
+    return <Navigate to="/login" />;
+  }
 
   return (
     <div className="min-h-screen bg-gray-100">

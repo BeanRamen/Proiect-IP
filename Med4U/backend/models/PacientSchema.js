@@ -24,6 +24,11 @@ const pacientSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  parafa: String,
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 const Pacient = mongoose.model("Pacient", pacientSchema);

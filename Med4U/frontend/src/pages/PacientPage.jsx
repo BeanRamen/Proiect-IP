@@ -1,14 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
 const PacientPage = () => {
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user && user.role === "pacient") {
+      navigate(`/pacient/${user._id}`);
+    }
+  }, [user, navigate]);
 
   return (
     <div>
-      <h1>Pacient Page</h1>
-      <button onClick={logout}>Logout</button>
-      {/* Add pacient functionalities here */}
+      <h1>Loading...</h1>
     </div>
   );
 };

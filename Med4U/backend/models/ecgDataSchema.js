@@ -6,15 +6,16 @@ const ecgDataSchema = new mongoose.Schema({
     ref: "Pacient",
     required: true,
   },
-  puls: Number,
-  temperatura: Number,
-  ecg: [Number],
-  timestamp: {
+  temperatura: String,
+  puls: String,
+  ecg: String,
+  umiditate: String,
+  createdAt: {
     type: Date,
     default: Date.now,
   },
 });
 
-const ECGData = mongoose.model("ECGData", ecgDataSchema);
+const EcgData = mongoose.model("EcgData", ecgDataSchema);
 
-module.exports = ECGData;
+module.exports = EcgData;

@@ -2,6 +2,7 @@ const Pacient = require("../models/PacientSchema");
 const Medic = require("../models/MedicSchema");
 const Admin = require("../models/AdminSchema");
 const Recomandare = require("../models/recomandareSchema");
+const EcgData = require("../models/ecgDataSchema");
 const createError = require("../utilis/appError.js");
 const bcrypt = require("bcryptjs");
 
@@ -212,7 +213,7 @@ const getMedici = async (req, res, next) => {
 const getPacienti = async (req, res, next) => {
   try {
     const { medicId } = req.query;
-    console.log("Fetching pacients for medic with ID:", medicId); // Adăugăm log pentru debug
+    console.log("Fetching pacients for medic with ID:", medicId);
     const pacients = await Pacient.find({ medic: medicId });
     res.status(200).json(pacients);
   } catch (error) {
@@ -224,7 +225,6 @@ const getPacienti = async (req, res, next) => {
 const getPacient = async (req, res, next) => {
   try {
     const { id } = req.params;
-    console.log("Fetching pacient with ID:", id); // Adăugăm log pentru debug
     const pacient = await Pacient.findById(id);
     if (!pacient) {
       return res.status(404).json({ message: "Pacient not found" });
@@ -286,6 +286,56 @@ const deleteRecomandare = async (req, res, next) => {
   }
 };
 
+const getPacientDetails = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    console.log("Fetching details for pacientId:", id);
+
+    const pacient = await Pacient.findById(id);
+    if (!pacient) {
+      console.log("Pacient not found for id:", id);
+      return res.status(404).json({ message: "Pacient not found" });
+    }
+
+    console.log("Pacient found:", pacient);
+
+    const ecgData = await EcgData.find({ pacientId: id }).sort({
+      createdAt: -1,
+    });
+    if (!ecgData.length) {
+      console.log("No EcgData found for pacientId:", id);
+      return res.status(404).json({ message: "ecgData not found" });
+    }
+
+    console.log("EcgData found:", ecgData);
+
+    res.status(200).json({ pacient, ecgData });
+  } catch (error) {
+    console.error("Error fetching pacient details:", error);
+    next(error);
+  }
+};
+
+const getEcgData = async (req, res, next) => {
+  try {
+    const { pacientId } = req.params;
+    console.log("Fetching ECG data for pacientId:", pacientId);
+
+    const ecgData = await EcgData.find({ pacientId }).sort({ createdAt: -1 });
+    if (!ecgData.length) {
+      console.log("No EcgData found for pacientId:", pacientId);
+      return res.status(404).json({ message: "EcgData not found" });
+    }
+
+    console.log("EcgData found:", ecgData);
+
+    res.status(200).json(ecgData[0]);
+  } catch (error) {
+    console.error("Error fetching ECG data:", error);
+    next(error);
+  }
+};
+
 module.exports = {
   login,
   signupPacient,
@@ -298,4 +348,6 @@ module.exports = {
   getRecomandari,
   addRecomandare,
   deleteRecomandare,
+  getPacientDetails,
+  getEcgData,
 };

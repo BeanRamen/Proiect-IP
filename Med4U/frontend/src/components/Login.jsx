@@ -106,12 +106,6 @@ const Login = () => {
             />
           </Form.Item>
 
-          <div className="mb-4 text-right">
-            <Link to="/forgot-password" className="text-[#147B72] text-sm">
-              Ați uitat parola?
-            </Link>
-          </div>
-
           <Form.Item>
             <Button
               type="primary"

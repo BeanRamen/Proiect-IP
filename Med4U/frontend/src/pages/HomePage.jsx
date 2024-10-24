@@ -22,13 +22,6 @@ const HomePage = () => {
           Autentificare
         </button>
 
-        {/* <button
-          className="px-4 py-2 bg-transparent text-[#147B72] rounded-full shadow-md hover:bg-[#147B72] hover:text-white w-64"
-          onClick={() => navigate("/register")}
-        >
-          Cont nou
-        </button> */}
-
         <svg
           version="1.1"
           id="Layer_1"
